@@ -1,0 +1,2 @@
+41f7b0b967c3f3abdf94f077fac131935deb558ecfa633e66dfc4c8baba9bc18 *leku_nut65cu_default.bin
+9dc44e69689b4a337beed78975d9f96dcc9d90894a466bb21c9feb993d29e8e7 *leku_nut65cu_ledtest.bin

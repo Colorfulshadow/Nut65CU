@@ -1,0 +1,55 @@
+diff --git a/keyboards/linker/wireless/module.c b/keyboards/linker/wireless/module.c
+index 7ae8af094a..c16f0796d6 100644
+--- a/keyboards/linker/wireless/module.c
++++ b/keyboards/linker/wireless/module.c
+@@ -161,12 +161,20 @@ static void md_receive_msg_task(void) {
+ 
+                 // raw data
+                 if ((md_rev_payload[0] == MD_REV_CMD_RAW) && (md_rev_payload[1] == MD_REV_CMD_RAW_OUT)) {
++                    if (data > MD_RAW_SIZE) { // Length byte: a raw packet is at most MD_RAW_SIZE.
++                        data_count = 0;
++                        continue;
++                    }
+                     md_rev_payload[data_count++] = data;
+                     data_remain                  = data + 1;
+                     continue;
+                 }
+             }
+             default: {
++                if (data_count >= sizeof(md_rev_payload)) { // Never write past the buffer.
++                    data_count = 0;
++                    continue;
++                }
+                 md_rev_payload[data_count++] = data;
+                 data_remain--;
+ 
+diff --git a/quantum/rgb_matrix/animations/pixel_fractal_anim.h b/quantum/rgb_matrix/animations/pixel_fractal_anim.h
+index 90a75ed321..58ec830b84 100644
+--- a/quantum/rgb_matrix/animations/pixel_fractal_anim.h
++++ b/quantum/rgb_matrix/animations/pixel_fractal_anim.h
+@@ -31,10 +31,10 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
+             // Light and copy columns outward
+             for (uint8_t l = 0; l < MID_COL - 1; ++l) {
+                 RGB index_rgb = led[h][l] ? (RGB){rgb.r, rgb.g, rgb.b} : (RGB){0, 0, 0};
+-                if (HAS_ANY_FLAGS(g_led_config.flags[g_led_config.matrix_co[h][l]], params->flags)) {
++                if (g_led_config.matrix_co[h][l] != NO_LED && HAS_ANY_FLAGS(g_led_config.flags[g_led_config.matrix_co[h][l]], params->flags)) { // skip positions without an LED
+                     rgb_matrix_set_color(g_led_config.matrix_co[h][l], index_rgb.r, index_rgb.g, index_rgb.b);
+                 }
+-                if (HAS_ANY_FLAGS(g_led_config.flags[g_led_config.matrix_co[h][MATRIX_COLS - 1 - l]], params->flags)) {
++                if (g_led_config.matrix_co[h][MATRIX_COLS - 1 - l] != NO_LED && HAS_ANY_FLAGS(g_led_config.flags[g_led_config.matrix_co[h][MATRIX_COLS - 1 - l]], params->flags)) { // skip positions without an LED
+                     rgb_matrix_set_color(g_led_config.matrix_co[h][MATRIX_COLS - 1 - l], index_rgb.r, index_rgb.g, index_rgb.b);
+                 }
+                 led[h][l] = led[h][l + 1];
+@@ -42,10 +42,10 @@ static bool PIXEL_FRACTAL(effect_params_t* params) {
+ 
+             // Light both middle columns
+             RGB index_rgb = led[h][MID_COL - 1] ? (RGB){rgb.r, rgb.g, rgb.b} : (RGB){0, 0, 0};
+-            if (HAS_ANY_FLAGS(g_led_config.flags[g_led_config.matrix_co[h][MID_COL - 1]], params->flags)) {
++            if (g_led_config.matrix_co[h][MID_COL - 1] != NO_LED && HAS_ANY_FLAGS(g_led_config.flags[g_led_config.matrix_co[h][MID_COL - 1]], params->flags)) { // skip positions without an LED
+                 rgb_matrix_set_color(g_led_config.matrix_co[h][MID_COL - 1], index_rgb.r, index_rgb.g, index_rgb.b);
+             }
+-            if (HAS_ANY_FLAGS(g_led_config.flags[g_led_config.matrix_co[h][MATRIX_COLS - MID_COL]], params->flags)) {
++            if (g_led_config.matrix_co[h][MATRIX_COLS - MID_COL] != NO_LED && HAS_ANY_FLAGS(g_led_config.flags[g_led_config.matrix_co[h][MATRIX_COLS - MID_COL]], params->flags)) { // skip positions without an LED
+                 rgb_matrix_set_color(g_led_config.matrix_co[h][MATRIX_COLS - MID_COL], index_rgb.r, index_rgb.g, index_rgb.b);
+             }
+ 
