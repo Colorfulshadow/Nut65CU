@@ -135,6 +135,12 @@
         },
         {
             "key": "CU_PSHW"
+        },
+        {
+            "key": "CU_INFO"
+        },
+        {
+            "key": "CU_MODE"
         }
     ],
     "matrix_pins": {

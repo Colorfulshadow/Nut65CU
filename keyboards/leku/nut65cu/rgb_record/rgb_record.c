@@ -4,6 +4,7 @@
 #include "rgb_record.h"
 #include "rgb_matrix.h"
 #include "eeprom.h"
+#include "cu_profile.h"
 
 #define RGBREC_STATE_ON  1
 #define RGBREC_STATE_OFF 0
@@ -268,6 +269,7 @@ void eeconfig_init_user_datablock(void) {
 
     addr = (uint32_t)(RGBREC_EECONFIG_ADDR);
     eeprom_update_block(rgbrec_default_effects, (void *)addr, sizeof(rgbrec_default_effects));
+    cu_profile_invalidate(); // per-device settings back to defaults as well
     // QMK's default implementation stamps the block version; the OEM override didn't,
     // so the block never read as valid (matrix_init_kb would reset on every boot).
     eeprom_update_dword(EECONFIG_USER, (EECONFIG_USER_DATA_VERSION));

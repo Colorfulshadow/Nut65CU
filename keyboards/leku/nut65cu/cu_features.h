@@ -41,10 +41,14 @@ enum cu_via_value_id {
     id_cu_bar_mode,  // light bar mode 0-12 (as stepped by RL_MOD)
     id_cu_bar_level, // light bar brightness 1-5
     id_cu_bar_speed, // rainbow speed 1-5 (RGB matrix speed 55-215)
+    id_cu_profiles,  // per-device settings on/off (cu_profile.c)
+    id_cu_mode,      // normal / power save / game (cu_mode.c)
 };
 
 void cu_features_init(void);                                    // after the board's EEPROM init
 void cu_features_task(void);                                    // housekeeping, after charging_state is read
+void cu_features_before_sleep(void);                            // lowpower: about to sleep
+void cu_features_after_wake(void);                              // lowpower: awake again
 bool cu_process_record(uint16_t keycode, keyrecord_t *record); // false: key handled
 void cu_draw_bar(void);                                         // over the bar's own mode, under status blinks
 bool cu_prevent_sleep(void);                                    // pomodoro running: keep the clock going

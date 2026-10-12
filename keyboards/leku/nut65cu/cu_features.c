@@ -5,7 +5,11 @@
 //   Fn+;  (CU_POMO)   pomodoro: tap = start work / skip to the next phase, hold 1 s = stop
 //   Fn+'  (CU_PSHW)  pomodoro progress on the light bar on/off
 //   Fn+A  (CU_WPM)    WPM meter on the light bar on/off
-//   plus a low-battery alert on the bar and switching to USB while a cable is plugged in.
+//   Fn+I  (CU_INFO)   type a status report (cu_host.c)
+//   Fn+P  (CU_MODE)   normal -> power save -> game mode (cu_mode.c)
+//   plus a low-battery alert on the bar and switching to USB while a cable is plugged in,
+//   and it starts and runs the rest: external flash, event log, key counters, per-device
+//   settings and the raw HID commands (cu_store/log/keys/profile/host.c).
 //
 // Everything on the bar is drawn at the bar brightness (hs_strip_val(), at most 75):
 // 80 LEDs at full brightness draw enough current to make the LED boost converter whine.
@@ -15,6 +19,12 @@
 #include "usb_main.h"
 #include "lib/lib8tion/lib8tion.h"
 #include "cu_features.h"
+#include "cu_store.h"
+#include "cu_log.h"
+#include "cu_keys.h"
+#include "cu_profile.h"
+#include "cu_host.h"
+#include "cu_mode.h"
 
 extern bool    charging_state; // nut65cu.c: USB cable present (HS_BAT_CABLE_PIN)
 extern uint8_t hs_strip_val(void);
@@ -293,6 +303,16 @@ static void auto_usb_task(void) {
 
 void cu_features_init(void) {
     settings_load();
+    cu_profile_init();
+
+    // A factory reset runs keyboard_post_init_kb again: keep the log and unsaved counts.
+    static bool store_started;
+    if (!store_started) {
+        store_started = true;
+        cu_store_init();
+        cu_log_init();
+        cu_keys_init();
+    }
 }
 
 void cu_features_task(void) {
@@ -300,10 +320,37 @@ void cu_features_task(void) {
     if (timer_read32() > 1000) auto_usb_task();
     pomo_task();
     low_bat_task();
+    cu_store_task();
+    cu_log_task();
+    cu_keys_task();
+    cu_profile_task();
+    cu_host_task();
+    cu_mode_task();
+}
+
+void cu_features_before_sleep(void) {
+    cu_log_before_sleep();
+    if (cu_keys_dirty()) cu_keys_save();
+    cu_store_wait(); // don't stop the clocks in the middle of an erase
+}
+
+void cu_features_after_wake(void) {
+    cu_log_after_wake();
+    cu_mode_after_wake();
 }
 
 bool cu_process_record(uint16_t keycode, keyrecord_t *record) {
+    if (!cu_mode_process_record(keycode, record)) return false;
+
     switch (keycode) {
+        case CU_MODE:
+            if (record->event.pressed) {
+                cu_mode_t next = (cu_mode_get() + 1) % CU_MODE_COUNT;
+                cu_mode_set(next);
+                // white: normal, green: power save, red: game
+                flash_start(next == CU_MODE_GAME ? HUE_RED : HUE_GREEN, next == CU_MODE_NORMAL ? 0 : 255, 2, 150);
+            }
+            return false;
         case CU_WPM:
             if (record->event.pressed) {
                 cu.wpm_on = !cu.wpm_on;
@@ -322,6 +369,9 @@ bool cu_process_record(uint16_t keycode, keyrecord_t *record) {
                 pomo_key_down = 0;
             }
             return false;
+        case CU_INFO:
+            if (record->event.pressed) cu_host_report();
+            return false;
         case CU_PSHW:
             if (record->event.pressed) {
                 cu.pomo_show = !cu.pomo_show;
@@ -336,6 +386,13 @@ bool cu_process_record(uint16_t keycode, keyrecord_t *record) {
 }
 
 void cu_draw_bar(void) {
+    // Power save mode: only alerts and feedback (the flashes) light the bar.
+    if (cu_mode_bar_dark()) {
+        bar_fill((RGB){0});
+        flash_draw();
+        return;
+    }
+
     bool pomo_shown = pomo_phase != POMO_IDLE && cu.pomo_show;
 
     // With both on, the pomodoro shows while you're not typing.
@@ -363,6 +420,8 @@ bool cu_via_get_value(uint8_t value_id, uint8_t *value_data) {
         case id_cu_pomo_show:     value_data[0] = cu.pomo_show; break;
         case id_cu_bar_mode:      value_data[0] = hs_rl_mode_get(); break;
         case id_cu_bar_level:     value_data[0] = hs_rl_level_get() + 1; break;
+        case id_cu_profiles:      value_data[0] = cu_profile_enabled(); break;
+        case id_cu_mode:          value_data[0] = cu_mode_get(); break;
         case id_cu_bar_speed:     value_data[0] = MIN(5, 1 + (MAX(rgb_matrix_get_speed(), BAR_SPEED_MIN) - BAR_SPEED_MIN + RGB_MATRIX_SPD_STEP / 2) / RGB_MATRIX_SPD_STEP); break;
         default: return false;
     }
@@ -382,6 +441,8 @@ bool cu_via_set_value(uint8_t value_id, uint8_t *value_data) {
         // Kept by the board (confinfo) and the RGB matrix config, not in cu_settings_t.
         case id_cu_bar_mode:      hs_rl_mode_set(v); return true;
         case id_cu_bar_level:     hs_rl_level_set(MAX(1, MIN(v, 5)) - 1); return true;
+        case id_cu_profiles:      cu_profile_set_enabled(v != 0); return true;
+        case id_cu_mode:          cu_mode_set(v); return true;
         case id_cu_bar_speed:     rgb_matrix_set_speed(BAR_SPEED_MIN + (MAX(1, MIN(v, 5)) - 1) * RGB_MATRIX_SPD_STEP); return true;
         default: return false;
     }

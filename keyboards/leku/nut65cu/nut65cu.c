@@ -7,6 +7,10 @@
 #include "rgb_record/rgb_rgblight.h"
 #include "lib/lib8tion/lib8tion.h"
 #include "cu_features.h"
+#include "cu_keys.h"
+#include "cu_host.h"
+#include "cu_profile.h"
+#include "cu_mode.h"
 
 #ifdef WIRELESS_ENABLE
 #    include "wireless.h"
@@ -534,6 +538,7 @@ void suspend_wakeup_init_kb(void) {
     }
 
     wireless_devs_change(wireless_get_current_devs(), wireless_get_current_devs(), false);
+    cu_mode_after_wake(); // LED power is back on
     // A sleep request raised while the board was already going to sleep would
     // otherwise still be pending and send it straight back to sleep after this wake.
     lpwr_set_timeout_manual(false);
@@ -840,6 +845,9 @@ bool hs_process_record(uint16_t keycode, keyrecord_t *record) {
 
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+
+    cu_keys_record(record);
+    cu_host_key_event(keycode, record);
 
     if (process_record_user(keycode, record) != true) {
         return false;
@@ -1403,6 +1411,7 @@ void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
         if (confinfo.devs > 0 && confinfo.devs < 4) confinfo.last_btdevs = confinfo.devs;
         eeconfig_confinfo_update();
     }
+    cu_profile_switch(new_devs); // no-op unless the device really changed
 
     switch (new_devs) {
         case DEVS_BT1: {
@@ -1686,6 +1695,9 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
         }
     }
 
+    // Game mode's Win LED; power save mode cuts the LED power while all of this is black.
+    cu_mode_indicators();
+
     // Let the keymap draw last (standard kb -> user hook chain).
     return rgb_matrix_indicators_advanced_user(led_min, led_max);
 }
@@ -1721,6 +1733,10 @@ void hs_reset_settings(void) {
     keyboard_post_init_kb();
 }
 
+
+void lpwr_presleep_hook(void) {
+    cu_features_before_sleep();
+}
 
 void lpwr_wakeup_hook(void) { // awake
 
@@ -1759,6 +1775,7 @@ void lpwr_wakeup_hook(void) { // awake
         rgblight_cut_flag = false;
     }
 
+    cu_features_after_wake();
 }
 
 // Runs after VIA has read the EEPROM and before quantum_init / rgb_matrix_init.
@@ -1818,6 +1835,30 @@ void hs_rl_mode_set(uint8_t mode) {
     rgblight_cut_flag     = false;
     gpio_write_pin_low(HS_MUSIC_CUT_PIN);
     confinfo.rgb_light_mode = mode;
+    eeconfig_confinfo_update();
+}
+
+// Per-device settings (cu_profile.c).
+bool hs_os_is_mac(void) {
+    return keymap_is_mac_system();
+}
+
+// Like SYS_CUT, without the blink: the device switch shows its own.
+void hs_os_set_mac(bool mac) {
+    set_single_persistent_default_layer(mac ? _MBL : _BL);
+    md_send_devctrl_bat(mac ? 0x80 : 0x81);
+}
+
+bool hs_music_active(void) {
+    return confinfo.hs_music_cut;
+}
+
+bool hs_f_row_get(void) {
+    return confinfo.hs_cut_f_layer;
+}
+
+void hs_f_row_set(bool on) {
+    confinfo.hs_cut_f_layer = on;
     eeconfig_confinfo_update();
 }
 

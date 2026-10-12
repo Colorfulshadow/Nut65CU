@@ -1,6 +1,9 @@
 #include "wls.h"
 #include "usb_main.h"
 #include "cu_features.h"
+#include "cu_host.h"
+#include "cu_log.h"
+#include "cu_mode.h"
 
 static ioline_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;
 
@@ -129,7 +132,7 @@ bool hs_rgb_blink_hook() {
     // below (MD_STATE_CONNECTED); when both fired around the same time the
     // second sleep request was left pending and put the board back to sleep
     // right after it woke. With "none" selected that timer fired immediately.
-    lpwr_set_timeout_value(timeout);
+    lpwr_set_timeout_value(cu_mode_sleep_timeout(timeout)); // power save mode: at most 1 min
 
     switch (*md_getp_state()) {
         case MD_STATE_NONE: {
@@ -289,6 +292,7 @@ void lpwr_stop_hook_pre(void) { // SLEEP
 }
 
 void lpwr_stop_hook_post(void) {
+    cu_log_stop_returned(lpwr_get_sleep_wakeupcd());
     if (lower_sleep) {
         switch (lpwr_get_sleep_wakeupcd()) {
             case LPWR_WAKEUP_USB:
@@ -387,6 +391,8 @@ void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
 bool via_command_kb(uint8_t *data, uint8_t length) {
     
     hs_rgb_blink_set_timer(timer_read32());
+
+    if (cu_host_hid(data, length)) return true;
     
     uint8_t *command_id = &(data[0]);
     if (*command_id == id_eeprom_reset) {

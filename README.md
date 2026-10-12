@@ -1,7 +1,7 @@
 # Nut65CU
 
 维咖（Weikav）**NUT65 CU**（纯铜版，无单键 RGB，8 颗指示灯 + 80 颗灯带）的自制 QMK 固件。
-基于方案商航晟（hangshengkeji）开源的普通版 NUT65 QMK 源码移植，修复了原厂代码中的多个问题，并加入番茄钟、打字速度条等灯带功能。
+基于方案商航晟（hangshengkeji）开源的普通版 NUT65 QMK 源码移植，修复了原厂代码中的多个问题，并加入番茄钟、打字速度条、省电 / 游戏模式、每设备设置、电池与休眠日志、按键热力图等功能。
 
 ![快捷键与功能速查](docs/manual.png)
 
@@ -15,6 +15,10 @@
 - **WPM 打字速度条**：从中间向两端，绿 → 黄 → 红
 - **低电量提醒**：电量低于 30% / 15% 时灯带定时闪烁
 - 8 颗指示灯只显示状态：连接、大写、Win 锁、电池
+- **正常 / 省电 / 游戏模式**（Fn+P）：省电模式灯全黑时切断灯珠电源、最多 1 分钟休眠；游戏模式消抖 1 ms、禁用 Win 键
+- **每设备设置**：USB、各蓝牙、2.4G 分别记住模式、Win/Mac、Win 锁、全键无冲、数字行和灯带
+- **电池 / 休眠日志**与**按键计数**存在键盘的外部 Flash，用电脑端工具读出（USB 或 2.4G）
+- **Fn+I** 在当前窗口打出状态报告（固件版本、连接、电量、模式等）
 - VIA 支持：改键、宏，以及灯带与各项功能的设置菜单
 - 所有整条灯带的显示都限制了亮度，避免升压电路啸叫
 
@@ -41,7 +45,8 @@
    wb32-dfu-updater_cli -R
    ```
 
-4. 从其他固件刷过来时，第一次启动会自动恢复出厂设置一次；之后刷新版本会保留设置。
+4. 从其他固件刷过来时，第一次启动会自动恢复出厂设置一次；之后刷新版本会保留本固件的设置。
+   注意 VIA 的改键与宏以编译日期校验，刷入不同日期编译的固件时会恢复默认键位，需要的话先在 VIA 里导出备份。
 
 **刷机前强烈建议先备份原厂固件**（只读，不要加 `-t`）：
 
@@ -65,15 +70,27 @@ make leku/nut65cu:default
 
 在 Windows 上使用 QMK MSYS 编译；构建目录路径不要太长。
 
+## 电脑端工具
+
+`tools/cu_hid.py`：Windows 上直接用 Python 运行，无需安装依赖；键盘需用 USB 或 2.4G 连接（蓝牙下无线模块不转发，用不了）。
+
+```
+python tools/cu_hid.py info                  # 连接、电量、模式、外部 Flash
+python tools/cu_hid.py log --csv log.csv     # 电池 / 休眠 / 连接日志
+python tools/cu_hid.py keys --svg map.svg    # 按键热力图
+python tools/cu_hid.py profile               # 每设备设置
+python tools/cu_hid.py mode eco              # 切换模式：normal / eco / game
+```
+
 ## 仓库结构
 
 | 路径 | 内容 |
 |---|---|
 | `keyboards/leku/nut65cu/` | 键盘源码（keymap：`default`、`ledtest`） |
-| `patches/oem-shared-fixes.patch` | 对原厂共享代码的两处修复（无线接收越界、Pixel Fractal 越界） |
+| `patches/oem-shared-fixes.patch` | 对原厂共享代码的修复（无线接收越界、Pixel Fractal 越界、Raw HID 按来源回复、模块收发计数） |
 | `firmware/` | 编译好的固件与 VIA 配置 |
 | `docs/` | 说明书、改动清单、硬件资料 |
-| `tools/` | 说明书生成脚本、从固件中读取引脚表 / 灯珠表的分析脚本 |
+| `tools/` | 电脑端工具 `cu_hid.py`、说明书生成脚本、从固件中读取引脚表 / 灯珠表的分析脚本 |
 
 ## 致谢
 

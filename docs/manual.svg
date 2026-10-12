@@ -1,31 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1499" viewBox="0 0 1680 1499" font-family="'Microsoft YaHei','PingFang SC','Noto Sans CJK SC','Source Han Sans SC',sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1573" viewBox="0 0 1680 1573" font-family="'Microsoft YaHei','PingFang SC','Noto Sans CJK SC','Source Han Sans SC',sans-serif">
 <defs>
 <linearGradient id="rainbow" x1="0" x2="1" y1="0" y2="0">
 <stop offset="0" stop-color="#EF4444"/><stop offset="0.2" stop-color="#F59E0B"/><stop offset="0.4" stop-color="#22C55E"/>
 <stop offset="0.6" stop-color="#06B6D4"/><stop offset="0.8" stop-color="#3B82F6"/><stop offset="1" stop-color="#A855F7"/></linearGradient>
 <radialGradient id="breath"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.5" stop-color="#F472B6"/><stop offset="1" stop-color="#6366F1"/></radialGradient>
 </defs>
-<rect width="1680" height="1499" fill="#F1F5F9"/>
+<rect width="1680" height="1573" fill="#F1F5F9"/>
 <text x="40.0" y="70.0" font-size="32" font-weight="800" fill="#0F172A" text-anchor="start">NUT65 CU 快捷键与功能速查</text>
 <text x="40.0" y="100.0" font-size="15" font-weight="400" fill="#64748B" text-anchor="start">按住 Fn 再按对应键。标“长按”的需持续按住。彩色键 = 有 Fn 功能，圆点 = 键下方有指示灯。</text>
 <rect x="1524.16" y="84" width="107.84" height="24" rx="12" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.5"/>
 <circle cx="1536.16" cy="96" r="4.5" fill="#DC2626"/>
 <text x="1546.2" y="100.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">恢复 / 刷机</text>
-<rect x="1456.16" y="84" width="60" height="24" rx="12" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.5"/>
-<circle cx="1468.16" cy="96" r="4.5" fill="#16A34A"/>
-<text x="1478.2" y="100.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">电池</text>
-<rect x="1388.16" y="84" width="60" height="24" rx="12" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.5"/>
-<circle cx="1400.16" cy="96" r="4.5" fill="#475569"/>
-<text x="1410.2" y="100.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">系统</text>
-<rect x="1258.8000000000002" y="84" width="121.36000000000001" height="24" rx="12" fill="#FFF7ED" stroke="#EA580C" stroke-opacity="0.5"/>
-<circle cx="1270.8000000000002" cy="96" r="4.5" fill="#EA580C"/>
-<text x="1280.8" y="100.5" font-size="13" font-weight="600" fill="#9A3412" text-anchor="start">番茄钟 / WPM</text>
-<rect x="1190.8000000000002" y="84" width="60" height="24" rx="12" fill="#F5F3FF" stroke="#7C3AED" stroke-opacity="0.5"/>
-<circle cx="1202.8000000000002" cy="96" r="4.5" fill="#7C3AED"/>
-<text x="1212.8" y="100.5" font-size="13" font-weight="600" fill="#5B21B6" text-anchor="start">灯光</text>
-<rect x="1122.8000000000002" y="84" width="60" height="24" rx="12" fill="#EFF6FF" stroke="#2563EB" stroke-opacity="0.5"/>
-<circle cx="1134.8000000000002" cy="96" r="4.5" fill="#2563EB"/>
-<text x="1144.8" y="100.5" font-size="13" font-weight="600" fill="#1E40AF" text-anchor="start">连接</text>
+<rect x="1408.3200000000002" y="84" width="107.84" height="24" rx="12" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.5"/>
+<circle cx="1420.3200000000002" cy="96" r="4.5" fill="#16A34A"/>
+<text x="1430.3" y="100.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">电池 / 模式</text>
+<rect x="1340.3200000000002" y="84" width="60" height="24" rx="12" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.5"/>
+<circle cx="1352.3200000000002" cy="96" r="4.5" fill="#475569"/>
+<text x="1362.3" y="100.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">系统</text>
+<rect x="1210.96" y="84" width="121.36000000000001" height="24" rx="12" fill="#FFF7ED" stroke="#EA580C" stroke-opacity="0.5"/>
+<circle cx="1222.96" cy="96" r="4.5" fill="#EA580C"/>
+<text x="1233.0" y="100.5" font-size="13" font-weight="600" fill="#9A3412" text-anchor="start">番茄钟 / WPM</text>
+<rect x="1142.96" y="84" width="60" height="24" rx="12" fill="#F5F3FF" stroke="#7C3AED" stroke-opacity="0.5"/>
+<circle cx="1154.96" cy="96" r="4.5" fill="#7C3AED"/>
+<text x="1165.0" y="100.5" font-size="13" font-weight="600" fill="#5B21B6" text-anchor="start">灯光</text>
+<rect x="1074.96" y="84" width="60" height="24" rx="12" fill="#EFF6FF" stroke="#2563EB" stroke-opacity="0.5"/>
+<circle cx="1086.96" cy="96" r="4.5" fill="#2563EB"/>
+<text x="1097.0" y="100.5" font-size="13" font-weight="600" fill="#1E40AF" text-anchor="start">连接</text>
 <rect x="40" y="132" width="1118" height="398" rx="14" fill="#F8FAFC" stroke="#E2E8F0"/>
 <text x="62.0" y="164.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">Fn 层（按住 Fn 时）</text>
 <text x="1138.0" y="163.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="end">Mac 模式下 Fn 层相同（Fn+Win 除外）</text>
@@ -102,12 +102,15 @@
 <text x="508.0" y="263.0" font-size="12" font-weight="600" fill="#94A3B8" text-anchor="start">Y</text>
 <rect x="568.0" y="246" width="62" height="62" rx="9" fill="#FFFFFF" stroke="#CBD5E1"/>
 <text x="576.0" y="263.0" font-size="12" font-weight="600" fill="#94A3B8" text-anchor="start">U</text>
-<rect x="636.0" y="246" width="62" height="62" rx="9" fill="#FFFFFF" stroke="#CBD5E1"/>
+<rect x="636.0" y="246" width="62" height="62" rx="9" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.55" stroke-width="1.3"/>
 <text x="644.0" y="263.0" font-size="12" font-weight="600" fill="#94A3B8" text-anchor="start">I</text>
+<text x="667.0" y="281.0" font-size="13" font-weight="700" fill="#1E293B" text-anchor="middle">状态</text>
+<text x="667.0" y="296.0" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">报告</text>
 <rect x="704.0" y="246" width="62" height="62" rx="9" fill="#FFFFFF" stroke="#CBD5E1"/>
 <text x="712.0" y="263.0" font-size="12" font-weight="600" fill="#94A3B8" text-anchor="start">O</text>
-<rect x="772.0" y="246" width="62" height="62" rx="9" fill="#FFFFFF" stroke="#CBD5E1"/>
+<rect x="772.0" y="246" width="62" height="62" rx="9" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.55" stroke-width="1.3"/>
 <text x="780.0" y="263.0" font-size="12" font-weight="600" fill="#94A3B8" text-anchor="start">P</text>
+<text x="803.0" y="296.0" font-size="13" font-weight="700" fill="#166534" text-anchor="middle">模式</text>
 <rect x="840.0" y="246" width="62" height="62" rx="9" fill="#FFFFFF" stroke="#CBD5E1"/>
 <text x="848.0" y="263.0" font-size="12" font-weight="600" fill="#94A3B8" text-anchor="start">[</text>
 <rect x="908.0" y="246" width="62" height="62" rx="9" fill="#FFFFFF" stroke="#CBD5E1"/>
@@ -248,15 +251,19 @@
 <circle cx="1215" cy="323" r="4.5" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
 <text x="1222.0" y="327.0" font-size="11" font-weight="600" fill="#334155" text-anchor="start">Win</text>
 <text x="1356.0" y="328.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">Win 键已锁定</text>
-<rect x="1206" y="346" width="48.0" height="26" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
+<rect x="1206" y="346" width="41.8" height="26" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
 <circle cx="1215" cy="359" r="4.5" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
-<text x="1222.0" y="363.0" font-size="11" font-weight="600" fill="#334155" text-anchor="start">Ctrl</text>
-<rect x="1257.96" y="346" width="48.0" height="26" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
-<circle cx="1266.96" cy="359" r="4.5" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
-<text x="1274.0" y="363.0" font-size="11" font-weight="600" fill="#334155" text-anchor="start">Ctrl</text>
-<text x="1356.0" y="364.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">左 Ctrl 下：红 = 充电中 / 电量低时闪，</text>
-<text x="1356.0" y="384.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">绿 = 已充满</text>
-<text x="1206.0" y="414.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">键盘图里带圆点的 8 个键下方有指示灯；平时熄灭，只显示状态。</text>
+<text x="1222.0" y="363.0" font-size="11" font-weight="600" fill="#334155" text-anchor="start">Win</text>
+<text x="1356.0" y="364.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">游戏模式（Win 键已禁用）</text>
+<rect x="1206" y="382" width="48.0" height="26" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
+<circle cx="1215" cy="395" r="4.5" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
+<text x="1222.0" y="399.0" font-size="11" font-weight="600" fill="#334155" text-anchor="start">Ctrl</text>
+<rect x="1257.96" y="382" width="48.0" height="26" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
+<circle cx="1266.96" cy="395" r="4.5" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
+<text x="1274.0" y="399.0" font-size="11" font-weight="600" fill="#334155" text-anchor="start">Ctrl</text>
+<text x="1356.0" y="400.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">左 Ctrl 下：红 = 充电中 / 电量低时闪，</text>
+<text x="1356.0" y="420.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">绿 = 已充满</text>
+<text x="1206.0" y="450.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">键盘图里带圆点的 8 个键下方有指示灯；平时熄灭，只显示状态。</text>
 <rect x="40.0" y="554" width="517.3333333333334" height="308" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
 <rect x="40.0" y="554" width="6" height="308" rx="3" fill="#2563EB"/>
 <text x="64.0" y="590.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">连接</text>
@@ -334,8 +341,8 @@
 <rect x="1146.7" y="789.0" width="64.8" height="26" rx="6" fill="#FFF7ED" stroke="#EA580C" stroke-opacity="0.45"/><text x="1155.7" y="806.5" font-size="13" font-weight="600" fill="#9A3412" text-anchor="start">Fn + A</text>
 <text x="1291.6" y="807.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">WPM 打字速度条：中间向两端，绿→黄→红，100</text>
 <text x="1291.6" y="827.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">WPM 满格</text>
-<rect x="40.0" y="886" width="517.3333333333334" height="330" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
-<rect x="40.0" y="886" width="6" height="330" rx="3" fill="#475569"/>
+<rect x="40.0" y="886" width="517.3333333333334" height="375" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="40.0" y="886" width="6" height="375" rx="3" fill="#475569"/>
 <text x="64.0" y="922.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">系统</text>
 <rect x="64.0" y="944.0" width="134.5" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="961.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + M 长按 3 秒</text>
 <text x="210.5" y="962.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">切换 Win / Mac</text>
@@ -350,24 +357,31 @@
 <text x="210.5" y="1135.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">锁定 Win 键</text>
 <rect x="64.0" y="1153.0" width="113.2" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1170.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + H J K L</text>
 <text x="210.5" y="1171.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">ScrLk · Pause · Home · End</text>
-<rect x="581.3333333333334" y="886" width="517.3333333333334" height="330" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
-<rect x="581.3333333333334" y="886" width="6" height="330" rx="3" fill="#16A34A"/>
-<text x="605.3" y="922.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">电池 · 休眠</text>
-<rect x="605.3" y="944.0" width="115.2" height="26" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.45"/><text x="614.3" y="961.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">Fn + 空格 按住</text>
-<text x="732.6" y="962.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">灯带分 10 段显示电量（无线模式）</text>
-<rect x="605.3" y="980.0" width="106.9" height="26" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.45"/><text x="614.3" y="997.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">Fn + 左 Ctrl</text>
-<text x="732.6" y="998.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电池指示灯 开 / 关</text>
-<rect x="605.3333333333334" y="1019" width="14" height="14" rx="4" fill="#EAB308" stroke="#94A3B8" stroke-width="1"/>
-<text x="625.3" y="1031.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×2</text>
-<text x="713.3" y="1031.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电量 15–30%：每 30 秒黄闪 2 次</text>
-<rect x="605.3333333333334" y="1051" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
-<text x="625.3" y="1063.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×4</text>
-<text x="713.3" y="1063.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电量 &lt; 15%：每 15 秒红闪 4 次</text>
-<text x="605.3" y="1094.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">无线空闲 5 分钟休眠，按任意键唤醒；有线不休眠。休眠时间与提醒开关在 VIA</text>
-<text x="605.3" y="1113.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">里改。</text>
-<text x="605.3" y="1142.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">电量耗尽 25 秒后深度休眠，插线唤醒。</text>
-<rect x="1122.6666666666667" y="886" width="517.3333333333334" height="330" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
-<rect x="1122.6666666666667" y="886" width="6" height="330" rx="3" fill="#7C3AED"/>
+<rect x="64.0" y="1189.0" width="64.8" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1206.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + I</text>
+<text x="210.5" y="1207.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">在当前窗口打出状态报告（先切英文输入法，按任意</text>
+<text x="210.5" y="1227.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">键中止）</text>
+<rect x="581.3333333333334" y="886" width="517.3333333333334" height="375" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="581.3333333333334" y="886" width="6" height="375" rx="3" fill="#16A34A"/>
+<text x="605.3" y="922.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">电池 · 休眠 · 模式</text>
+<rect x="605.3" y="944.0" width="64.8" height="26" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.45"/><text x="614.3" y="961.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">Fn + P</text>
+<text x="732.6" y="962.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">正常 → 省电 → 游戏 模式</text>
+<text x="605.3" y="994.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">省电：灯带只显示提醒，灯全黑时切断灯珠电源，最多 1 分钟休眠。游戏：消抖</text>
+<text x="605.3" y="1013.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">1 ms，禁用 Win 键。模式和 Win/Mac、灯带等设置按连接设备分别记住。</text>
+<rect x="605.3" y="1028.0" width="115.2" height="26" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.45"/><text x="614.3" y="1045.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">Fn + 空格 按住</text>
+<text x="732.6" y="1046.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">灯带分 10 段显示电量（无线模式）</text>
+<rect x="605.3" y="1064.0" width="106.9" height="26" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.45"/><text x="614.3" y="1081.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">Fn + 左 Ctrl</text>
+<text x="732.6" y="1082.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电池指示灯 开 / 关</text>
+<rect x="605.3333333333334" y="1103" width="14" height="14" rx="4" fill="#EAB308" stroke="#94A3B8" stroke-width="1"/>
+<text x="625.3" y="1115.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×2</text>
+<text x="713.3" y="1115.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电量 15–30%：每 30 秒黄闪 2 次</text>
+<rect x="605.3333333333334" y="1135" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
+<text x="625.3" y="1147.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×4</text>
+<text x="713.3" y="1147.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电量 &lt; 15%：每 15 秒红闪 4 次</text>
+<text x="605.3" y="1178.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">无线空闲 5 分钟休眠，按任意键唤醒；有线不休眠。休眠时间与提醒开关在 VIA</text>
+<text x="605.3" y="1197.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">里改。</text>
+<text x="605.3" y="1226.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">电量耗尽 25 秒后深度休眠，插线唤醒。</text>
+<rect x="1122.6666666666667" y="886" width="517.3333333333334" height="375" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="1122.6666666666667" y="886" width="6" height="375" rx="3" fill="#7C3AED"/>
 <text x="1146.7" y="922.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">灯带闪烁的含义</text>
 <rect x="1146.6666666666667" y="947" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
 <text x="1166.7" y="959.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×3</text>
@@ -403,15 +417,23 @@
 <rect x="1146.6666666666667" y="1171" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
 <text x="1166.7" y="1183.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×1</text>
 <text x="1254.7" y="1183.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">WPM 速度条关闭</text>
-<rect x="40" y="1240" width="1600" height="211" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
-<rect x="40" y="1240" width="6" height="211" rx="3" fill="#DC2626"/>
-<text x="64.0" y="1276.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">恢复 · 刷机 · VIA</text>
-<rect x="64.0" y="1298.0" width="149.0" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1315.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">Fn + Esc 长按 3 秒</text>
-<text x="228.2" y="1316.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">恢复出厂设置（整块键盘白闪 3 次）</text>
-<rect x="64.0" y="1334.0" width="152.2" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1351.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">Fn + 右Shift + Esc</text>
-<text x="228.2" y="1352.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">进入刷机模式</text>
-<rect x="64.0" y="1370.0" width="108.0" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1387.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">按住 Esc 插线</text>
-<text x="228.2" y="1388.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">清除设置并进入刷机模式（快捷键失效时的退路）</text>
-<text x="64.0" y="1420.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">VIA：加载 NUT65CU-via.json。Light bar 页：灯带模式 / 亮度 / 速度；Settings 页：休眠时间、插线切有线、低电量提醒、番茄钟时长与进度显示、WPM 显示与满格值。</text>
-<text x="1640.0" y="1477.0" font-size="12" font-weight="400" fill="#94A3B8" text-anchor="end">固件：github.com/Colorfulshadow/Nut65CU · 基于航晟 NUT65 开源 QMK</text>
+<rect x="1146.6666666666667" y="1203" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
+<text x="1168.7" y="1215.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
+<rect x="1174.6666666666667" y="1203" width="14" height="14" rx="4" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
+<text x="1196.7" y="1215.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
+<rect x="1202.6666666666667" y="1203" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
+<text x="1222.7" y="1215.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×2</text>
+<text x="1254.7" y="1215.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">切到 正常 / 省电 / 游戏 模式</text>
+<rect x="40" y="1285" width="1600" height="240" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="40" y="1285" width="6" height="240" rx="3" fill="#DC2626"/>
+<text x="64.0" y="1321.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">恢复 · 刷机 · VIA</text>
+<rect x="64.0" y="1343.0" width="149.0" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1360.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">Fn + Esc 长按 3 秒</text>
+<text x="228.2" y="1361.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">恢复出厂设置（整块键盘白闪 3 次）</text>
+<rect x="64.0" y="1379.0" width="152.2" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1396.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">Fn + 右Shift + Esc</text>
+<text x="228.2" y="1397.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">进入刷机模式</text>
+<rect x="64.0" y="1415.0" width="108.0" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1432.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">按住 Esc 插线</text>
+<text x="228.2" y="1433.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">清除设置并进入刷机模式（快捷键失效时的退路）</text>
+<text x="64.0" y="1465.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">VIA：加载 NUT65CU-via.json。Light bar 页：灯带模式 / 亮度 / 速度；Settings 页：休眠时间、插线切有线、低电量提醒、模式、每设备设置、番茄钟时长与进度显示、WPM 显示与满格值。</text>
+<text x="64.0" y="1494.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">电脑端工具 tools/cu_hid.py（USB 或 2.4G，蓝牙不支持）：状态、电池 / 休眠日志、按键热力图、每设备设置、模式。</text>
+<text x="1640.0" y="1551.0" font-size="12" font-weight="400" fill="#94A3B8" text-anchor="end">固件：github.com/Colorfulshadow/Nut65CU · 基于航晟 NUT65 开源 QMK</text>
 </svg>

@@ -173,6 +173,43 @@
           ]
         },
         {
+          "label": "Devices",
+          "content": [
+            {
+              "label": "Mode (power save: light bar off, LEDs unpowered when dark, sleep within 1 min; game: 1 ms debounce, Win key off)",
+              "type": "dropdown",
+              "content": [
+                "id_cu_mode",
+                0,
+                16
+              ],
+              "options": [
+                [
+                  "Normal",
+                  0
+                ],
+                [
+                  "Power save",
+                  1
+                ],
+                [
+                  "Game",
+                  2
+                ]
+              ]
+            },
+            {
+              "label": "Each device remembers its own Win/Mac, Win lock, NKRO, number row and light bar",
+              "type": "toggle",
+              "content": [
+                "id_cu_profiles",
+                0,
+                15
+              ]
+            }
+          ]
+        },
+        {
           "label": "Pomodoro",
           "content": [
             {
@@ -411,6 +448,16 @@
       "name": "Pomodoro progress on/off",
       "title": "Pomodoro progress on/off",
       "shortName": "CU_PSHW"
+    },
+    {
+      "name": "Type a status report",
+      "title": "Type a status report (switch the input method to English first)",
+      "shortName": "CU_INFO"
+    },
+    {
+      "name": "Mode: normal / power save / game",
+      "title": "Cycle normal -> power save -> game mode",
+      "shortName": "CU_MODE"
     }
   ],
   "layouts": {

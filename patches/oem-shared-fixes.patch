@@ -1,8 +1,61 @@
+diff --git a/keyboards/linker/wireless/md_raw.c b/keyboards/linker/wireless/md_raw.c
+index eebfc94d9f..d478a3fc3c 100644
+--- a/keyboards/linker/wireless/md_raw.c
++++ b/keyboards/linker/wireless/md_raw.c
+@@ -8,13 +8,19 @@
+ #    include "usb_endpoints.h"
+ #    include "usb_main.h"
+ 
++static bool raw_from_module; // the request being answered came over the air
++
+ void replaced_hid_send(uint8_t *data, uint8_t length) {
+ 
+     if (length != RAW_EPSIZE) {
+         return;
+     }
+ 
+-    if (get_transport() == TRANSPORT_USB) {
++    // Answer where the request came from: with a cable in while a wireless device is in
++    // use, USB requests used to be answered over the air.
++    if (raw_from_module) {
++        md_send_raw(data, length);
++    } else if (get_transport() == TRANSPORT_USB || USB_DRIVER.state == USB_ACTIVE) {
+         send_report(USB_ENDPOINT_IN_RAW, data, length);
+     } else {
+         md_send_raw(data, length);
+@@ -24,7 +30,9 @@ void replaced_hid_send(uint8_t *data, uint8_t length) {
+ void md_receive_raw_cb(uint8_t *data, uint8_t length) {
+     void raw_hid_receive(uint8_t * data, uint8_t length);
+ 
++    raw_from_module = true;
+     raw_hid_receive(data, length);
++    raw_from_module = false;
+ }
+ 
+ #endif
 diff --git a/keyboards/linker/wireless/module.c b/keyboards/linker/wireless/module.c
-index 7ae8af094a..c16f0796d6 100644
+index 7ae8af094a..abb7f74bc7 100644
 --- a/keyboards/linker/wireless/module.c
 +++ b/keyboards/linker/wireless/module.c
-@@ -161,12 +161,20 @@ static void md_receive_msg_task(void) {
+@@ -118,6 +118,8 @@ void md_receive_raw_cb(uint8_t *pdata, uint8_t len) {}
+ void md_receive_host_cb(bool resume) __attribute__((weak));
+ void md_receive_host_cb(bool resume) {}
+ 
++md_diag_t md_diag;
++
+ static void md_receive_msg_task(void) {
+     static uint32_t data_count = 0x00;
+     static uint8_t data_remain = 0x00;
+@@ -139,6 +141,8 @@ static void md_receive_msg_task(void) {
+                         data_remain                  = 2;
+                     } break;
+                     default: {
++                        md_diag.unknown++;
++                        md_diag.unknown_last = data;
+                         data_count = 0;
+                     } break;
+                 }
+@@ -161,12 +165,20 @@ static void md_receive_msg_task(void) {
  
                  // raw data
                  if ((md_rev_payload[0] == MD_REV_CMD_RAW) && (md_rev_payload[1] == MD_REV_CMD_RAW_OUT)) {
@@ -23,6 +76,69 @@ index 7ae8af094a..c16f0796d6 100644
                  md_rev_payload[data_count++] = data;
                  data_remain--;
  
+@@ -176,8 +188,15 @@ static void md_receive_msg_task(void) {
+             } break;
+         }
+ 
++        if (!md_check_sum(md_rev_payload, data_count)) md_diag.bad_sum++;
+         if (md_check_sum(md_rev_payload, data_count)) {
+             md_send_ack();
++            md_diag.frames++;
++            if (md_rev_payload[0] != MD_REV_CMD_BATVOL) {
++                memmove(md_diag.last[1], md_diag.last[0], sizeof(md_diag.last) - sizeof(md_diag.last[0]));
++                md_diag.last[0][0] = md_rev_payload[0];
++                md_diag.last[0][1] = md_rev_payload[1];
++            }
+ 
+             if (md_receive_process_kb(md_rev_payload, data_count) != true) {
+                 return;
+@@ -190,10 +209,15 @@ static void md_receive_msg_task(void) {
+ 
+                     len   = md_rev_payload[2];
+                     pdata = &md_rev_payload[3];
++                    md_diag.raw_rx++;
++                    md_diag.raw_len = len;
+ 
+-                    if (len == sizeof(md_raw_payload)) {
++                    // Over Bluetooth (BLE) the module delivers 31-byte reports: pad them
++                    // to the usual size instead of dropping them.
++                    if (len && len <= sizeof(md_raw_payload)) {
++                        memset(md_raw_payload, 0, sizeof(md_raw_payload));
+                         memcpy(md_raw_payload, pdata, len);
+-                        md_receive_raw_cb(md_raw_payload, len);
++                        md_receive_raw_cb(md_raw_payload, sizeof(md_raw_payload));
+                     }
+                 } break;
+                 case MD_REV_CMD_INDICATOR: {
+@@ -466,6 +490,7 @@ void md_send_raw(uint8_t *data, uint8_t length) {
+         return;
+     }
+ 
++    md_diag.raw_tx++;
+     sdata[0] = MD_SND_CMD_RAW;
+     sdata[1] = MD_SND_CMD_RAW_IN;
+     sdata[2] = length;
+diff --git a/keyboards/linker/wireless/module.h b/keyboards/linker/wireless/module.h
+index 854bab1fca..ee28fcce4d 100644
+--- a/keyboards/linker/wireless/module.h
++++ b/keyboards/linker/wireless/module.h
+@@ -132,3 +132,16 @@ uint8_t *md_getp_indicator(void);
+ void md_rf_send_carrier(uint8_t channel, uint8_t tx_power, uint8_t phy);
+ void md_rf_send_stop(void);
+ void md_send_devctrl_bat(uint8_t cmd);
++
++// Counters of what the module sent us, for checking the raw HID path (Bluetooth).
++typedef struct {
++    uint16_t frames;     // frames with a good checksum
++    uint16_t bad_sum;    // complete frames with a bad checksum
++    uint16_t unknown;    // bytes that didn't start a known frame
++    uint16_t raw_rx;     // raw packets passed on
++    uint16_t raw_tx;     // raw packets sent
++    uint8_t  unknown_last;
++    uint8_t  raw_len;    // length byte of the last raw packet
++    uint8_t  last[4][2]; // command, first byte of the last frames other than battery level
++} md_diag_t;
++extern md_diag_t md_diag;
 diff --git a/quantum/rgb_matrix/animations/pixel_fractal_anim.h b/quantum/rgb_matrix/animations/pixel_fractal_anim.h
 index 90a75ed321..58ec830b84 100644
 --- a/quantum/rgb_matrix/animations/pixel_fractal_anim.h

@@ -138,15 +138,27 @@
 
 /* rgb_record */
 #define ENABLE_RGB_MATRIX_RGBR_PLAY
-#define RGBREC_CHANNEL_NUM         4
+// Light recording does nothing on the CU (no per-key LEDs). It had 4 channels; the
+// 4th channel's EEPROM is now the CU extension block, placed first, so the datablock
+// size and every address after it (confinfo, CU settings, VIA keymaps) stay the same.
+#define RGBREC_CHANNEL_NUM         3
+#define EECONFIG_CU_EXT_SIZE       (MATRIX_ROWS * MATRIX_COLS * 2) // cu_ext_t (cu_profile.h), 180 bytes
 #define EECONFIG_CONFINFO_USE_SIZE (4 + 25 + 1)
 #define EECONFIG_RGBREC_USE_SIZE   (RGBREC_CHANNEL_NUM * MATRIX_ROWS * MATRIX_COLS * 2)
 #define EECONFIG_CU_USE_SIZE       8 // cu_settings_t (cu_features.h)
-#define EECONFIG_USER_DATA_SIZE    (EECONFIG_RGBREC_USE_SIZE + EECONFIG_CONFINFO_USE_SIZE + EECONFIG_CU_USE_SIZE)
+#define EECONFIG_USER_DATA_SIZE    (EECONFIG_CU_EXT_SIZE + EECONFIG_RGBREC_USE_SIZE + EECONFIG_CONFINFO_USE_SIZE + EECONFIG_CU_USE_SIZE)
 // Marks EEPROM written by this firmware. QMK's default version is just the block
 // size, which the NUT65 / packOrTake builds share, so their settings were read as ours.
 // Bump this when the user data layout changes; a mismatch factory-resets once (matrix_init_kb).
+// (The CU extension block has its own magic, so adding it did not need a bump.)
 #define EECONFIG_USER_DATA_VERSION 0x4E435502 // "NCU" v2: + CU settings block
-#define RGBREC_EECONFIG_ADDR       (uint8_t *)(EECONFIG_USER_DATABLOCK)
+#define CU_EXT_EECONFIG_ADDR       (void *)(EECONFIG_USER_DATABLOCK)
+#define RGBREC_EECONFIG_ADDR       (uint8_t *)((uint32_t)EECONFIG_USER_DATABLOCK + (uint32_t)EECONFIG_CU_EXT_SIZE)
 #define CONFINFO_EECONFIG_ADDR     (uint32_t *)((uint32_t)RGBREC_EECONFIG_ADDR + (uint32_t)EECONFIG_RGBREC_USE_SIZE)
 #define CU_EECONFIG_ADDR           (void *)((uint32_t)CONFINFO_EECONFIG_ADDR + (uint32_t)EECONFIG_CONFINFO_USE_SIZE)
+
+/* External SPI flash beyond the EEPROM (cu_store.c) */
+// Wear leveling erases the whole first 64 KB block, though it only uses 8 KB of it.
+#define CU_STORE_KEYS_BASE         0x10000 // key press counters, 64 KB
+#define CU_STORE_KEYS_SIZE         0x10000
+#define CU_STORE_LOG_BASE          0x20000 // event log, to the end of the chip
