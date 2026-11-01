@@ -27,6 +27,7 @@
 #include "cu_log.h"
 #include "cu_keys.h"
 #include "cu_profile.h"
+#include "cu_debounce.h"
 #include "cu_host.h"
 #include "cu_mode.h"
 #include "cu_overlay.h"
@@ -399,6 +400,7 @@ static void usb_link_task(void) {
 void cu_features_init(void) {
     settings_load();
     cu_profile_init();
+    cu_debounce_init();
 
     // A factory reset runs keyboard_post_init_kb again: keep the log and unsaved counts.
     static bool store_started;

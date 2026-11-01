@@ -30,7 +30,7 @@
 #include "action.h"
 
 #define CU_HID_CMD      0xC5 // not a VIA command id
-#define CU_HID_PROTOCOL 5    // 4: INFO page 1 (model), KEY_LIGHT; 5: light bar modes 13-24 (INFO p[27] bit 7 = mode bit 4)
+#define CU_HID_PROTOCOL 6    // 4: INFO page 1 (model), KEY_LIGHT; 5: light bar modes 13-24 (INFO p[27] bit 7 = mode bit 4)
 
 typedef enum {
     CU_HID_OK = 0,
@@ -56,6 +56,8 @@ enum cu_hid_command {
     CU_HID_PROFILE_GET    = 0x30, // u8 slot
     CU_HID_PROFILE_SET    = 0x31, // u8 slot, 4-byte cu_profile_t
     CU_HID_PROFILE_ENABLE = 0x32, // u8 on
+    CU_HID_DEBOUNCE_GET   = 0x33, // slot 0..7 -> slot, normal, game, active slot, effective, mode
+    CU_HID_DEBOUNCE_SET   = 0x34, // slot, normal ms, game ms; 1..30; immediate + EEPROM
     CU_HID_FLASH_READ     = 0x40, // u32 address -> u32 address, 24 bytes (whole chip, read only)
     CU_HID_FLASH_FORMAT   = 0x41, // u32 CU_HID_FORMAT_MAGIC: erase the log and counter regions
     CU_HID_BAR            = 0x50, // cu_bar_layer_t (cu_overlay.h): a light bar layer

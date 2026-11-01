@@ -15,6 +15,7 @@
 #include "cu_host.h"
 #include "cu_timer.h"
 #include "cu_mode.h"
+#include "cu_debounce.h"
 #include "cu_overlay.h"
 
 // nut65cu.c / wls.c
@@ -187,6 +188,18 @@ static cu_hid_status_t handle(uint8_t sub, const uint8_t *arg, uint8_t *p) {
         case CU_HID_PROFILE_ENABLE:
             cu_profile_set_enabled(arg[0] != 0);
             return CU_HID_OK;
+        case CU_HID_DEBOUNCE_SET:
+            if (!cu_debounce_set(arg[0], arg[1], arg[2])) return CU_HID_BAD_ARGUMENT;
+            // SET and GET have identical readback payloads.
+            __attribute__((fallthrough));
+        case CU_HID_DEBOUNCE_GET: {
+            uint8_t normal, game;
+            if (!cu_debounce_get(arg[0], &normal, &game)) return CU_HID_BAD_ARGUMENT;
+            p[0] = arg[0]; p[1] = normal; p[2] = game;
+            p[3] = cu_debounce_slot(); p[4] = cu_debounce_effective(); p[5] = cu_mode_get();
+            memcpy(p + 6, arg + 3, 4); // opaque request nonce, for late-reply rejection
+            return CU_HID_OK;
+        }
         case CU_HID_FLASH_READ: {
             uint32_t addr = get32(arg);
             put32(&p[0], addr);

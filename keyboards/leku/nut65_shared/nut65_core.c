@@ -12,6 +12,7 @@
 #include "cu_host.h"
 #include "cu_profile.h"
 #include "cu_mode.h"
+#include "cu_debounce.h"
 #include "cu_egg.h"
 #include "cu_barfx.h"
 
@@ -644,15 +645,15 @@ uint32_t wls_process_long_press(uint32_t trigger_time, void *cb_arg) {
             rgb_matrix_blink_set(HS_RGB_BLINK_INDEX_SYS_TEM);
         } break;
         case DEB_TOG: {
-            confinfo.DEB_flag = !confinfo.DEB_flag;
-            if(confinfo.DEB_flag) {
-                hs_deb = 1; 
+            cu_debounce_toggle();
+            hs_deb = cu_debounce_effective();
+            confinfo.DEB_flag = hs_deb == 1; // backward-compatible hint for old firmware
+            if(confinfo.DEB_flag) { 
                 rgb_matrix_blink_set_color(HS_RGB_BLINK_INDEX_DEB,0xff,0x00,0x00);
                 rgb_matrix_blink_set_remain_time(HS_RGB_BLINK_INDEX_DEB, 0); 
                 rgb_matrix_blink_set_interval_times(HS_RGB_BLINK_INDEX_DEB, 250, 3);
                 rgb_matrix_blink_set(HS_RGB_BLINK_INDEX_DEB);
             } else {
-                hs_deb = DEBOUNCE; 
                 rgb_matrix_blink_set_color(HS_RGB_BLINK_INDEX_DEB,0xff,0xff,0xff);
                 rgb_matrix_blink_set_remain_time(HS_RGB_BLINK_INDEX_DEB, 0); 
                 rgb_matrix_blink_set_interval_times(HS_RGB_BLINK_INDEX_DEB, 250, 3);

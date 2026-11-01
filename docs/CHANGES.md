@@ -1,5 +1,9 @@
 # 相对原厂 NUT65 源码的改动
 
+## p13 开发增量（2026-11-01，协议 6，未测试、未上机）
+
+新增 `cu_debounce.c`：1–30 ms 自定义消抖、正常与游戏独立、八个连接/全局槽、Fn+D 共用写入入口。协议 0x33/0x34 带槽与请求标记回显；设置持久化在旧扩展区 offset36 的预留字节，旧 profile / VIA / 宏与全局 EEPROM 布局不变。SPI Flash 读取范围检查避免 u32 加法回绕。完整开发状态与型号区别见 `firmware/p13/CHANGES.md`；已发布 p12 二进制保持冻结。本轮没有实现 HID / 无线安装器。
+
 起点：[hangshengkeji/qmk_firmware](https://github.com/hangshengkeji/qmk_firmware) @ `3164abd3` 的 `keyboards/leku/nut65`（普通版 NUT65，PID `0xE51A`）。
 `keyboards/leku/nut65cu` 由它复制而来；2026-10-31 起两个型号（NUT65 CU 与普通版 `nut65rgb`）的共用代码移到 `keyboards/leku/nut65_shared`（第 7 节）。
 对仓库共享代码的修改在 `patches/oem-shared-fixes.patch`。

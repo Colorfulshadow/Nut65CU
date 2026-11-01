@@ -11,6 +11,7 @@
 
 #include QMK_KEYBOARD_H
 #include "cu_mode.h"
+#include "cu_debounce.h"
 #include "cu_timer.h"
 #include "cu_log.h"
 #include "cu_profile.h"
@@ -23,7 +24,6 @@ extern bool      hs_music_active(void);      // nut65cu.c: the music chip drives
 #define ECO_SLEEP_MAX_MS    60000
 #define ECO_DARK_MS         500  // all LEDs black this long: cut their power
 #define ECO_IDLE_AFTER_MS   1000 // no input this long: idle 1 ms between scans
-#define GAME_DEBOUNCE_MS    1
 
 static cu_mode_t mode = CU_MODE_NORMAL;
 static bool      led_power = true;
@@ -67,7 +67,7 @@ bool cu_mode_bar_dark(void) {
 }
 
 uint16_t cu_mode_debounce(void) {
-    return mode == CU_MODE_GAME ? GAME_DEBOUNCE_MS : hs_deb;
+    return cu_debounce_effective();
 }
 
 uint32_t cu_mode_sleep_timeout(uint32_t timeout) {

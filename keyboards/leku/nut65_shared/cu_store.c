@@ -66,11 +66,11 @@ void cu_store_lock(void) {
 }
 
 static bool in_regions(uint32_t addr, uint32_t len) {
-    return state != CU_STORE_NONE && addr >= CU_STORE_KEYS_BASE && addr + len <= chip_size && addr + len >= addr;
+    return state != CU_STORE_NONE && addr >= CU_STORE_KEYS_BASE && len <= chip_size && addr <= chip_size - len;
 }
 
 bool cu_store_read(uint32_t addr, void *buf, uint32_t len) {
-    if (state == CU_STORE_NONE || addr + len > chip_size) return false;
+    if (state == CU_STORE_NONE || len > chip_size || addr > chip_size - len) return false;
     erasing = false; // flash_read_range waits for the erase
     return flash_read_range(addr, buf, len) == FLASH_STATUS_SUCCESS;
 }
