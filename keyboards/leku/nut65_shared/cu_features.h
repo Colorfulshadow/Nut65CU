@@ -1,4 +1,4 @@
-// Copyright 2026
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // NUT65 CU light bar features: pomodoro timer, WPM meter, low-battery alert,
@@ -24,7 +24,8 @@ typedef struct __attribute__((packed)) {
     uint8_t low_bat_alert : 1; // flash the light bar when the battery runs low
     uint8_t reserved_bits : 4;
     uint8_t auto_prev_devs;    // wireless device to return to after switching to USB on a cable (DEVS_USB = none)
-    uint8_t reserved[2];
+    uint8_t wpm_best;          // fastest WPM so far (0 = none yet): beating it plays an easter egg (cu_egg.c)
+    uint8_t bar_fx;            // light bar effect 1-12 (cu_barfx.c) over the OEM mode, 0 = the OEM mode
 } cu_settings_t;
 
 _Static_assert(sizeof(cu_settings_t) == EECONFIG_CU_USE_SIZE, "cu_settings_t must match EECONFIG_CU_USE_SIZE");
@@ -52,5 +53,8 @@ void cu_features_after_wake(void);                              // lowpower: awa
 bool cu_process_record(uint16_t keycode, keyrecord_t *record); // false: key handled
 void cu_draw_bar(void);                                         // over the bar's own mode, under status blinks
 bool cu_prevent_sleep(void);                                    // pomodoro running: keep the clock going
+bool cu_usb_link_pending(void);                                 // on USB with a cable, host hasn't configured the board yet
 bool cu_via_get_value(uint8_t value_id, uint8_t *value_data);
+uint8_t cu_bar_fx_get(void);         // 0 = none, else 1-CU_BARFX_COUNT
+void    cu_bar_fx_set(uint8_t fx);   // saves the settings when it changes
 bool cu_via_set_value(uint8_t value_id, uint8_t *value_data);

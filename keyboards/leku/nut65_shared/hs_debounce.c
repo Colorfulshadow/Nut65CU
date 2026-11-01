@@ -1,4 +1,4 @@
-// Copyright 2026
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // sym_defer_g with a run-time debounce time, so Fn+D (DEB_TOG) takes effect.

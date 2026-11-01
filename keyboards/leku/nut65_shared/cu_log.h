@@ -1,4 +1,4 @@
-// Copyright 2026
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // Battery / sleep / connection event log in the external flash (CU_STORE_LOG_BASE to the
@@ -22,6 +22,7 @@ typedef enum {
     CU_LOG_TIME,      // bytes 12-15 hold the Unix time the host sent, instead of bat/state/arg
     CU_LOG_MARK,      // arg: from the host (tools/cu_hid.py mark)
     CU_LOG_MODE,      // arg: cu_mode_t (normal / power save / game)
+    CU_LOG_USB_RETRY, // on USB with a cable but no host configured the board: arg = restart 1, 2, ..., 0xFF = gave up, back to wireless
 } cu_log_type_t;
 
 typedef enum {
@@ -55,6 +56,7 @@ bool     cu_log_get(uint32_t seq, cu_log_record_t *rec);
 bool     cu_log_check(const cu_log_record_t *rec, uint32_t slot);
 
 // Sleep bookkeeping (lowpower hooks)
+cu_log_sleep_reason_t cu_log_sleep_reason(void); // why the keyboard is going to sleep (lpwr_presleep_hook)
 void cu_log_before_sleep(void);
 void cu_log_stop_returned(uint8_t wakeupcd); // every return from MCU stop mode
 void cu_log_after_wake(void);

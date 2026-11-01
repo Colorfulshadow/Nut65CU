@@ -1,4 +1,4 @@
-// Copyright 2026
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // Per-device settings. Rather than hooking every key and VIA command that changes one
@@ -9,7 +9,9 @@
 #include QMK_KEYBOARD_H
 #include "wireless.h"
 #include "cu_profile.h"
+#include "cu_barfx.h"
 #include "cu_mode.h"
+#include "cu_timer.h"
 
 #define CU_EXT_MAGIC   0xC6
 #define CU_EXT_VERSION 1
@@ -121,7 +123,7 @@ void cu_profile_task(void) {
     cu_profile_t now = capture();
     if (!same(&now, &ext.profile[active])) {
         ext.profile[active] = now;
-        changed_at          = timer_read32() | 1;
+        changed_at          = cu_timer_start();
     }
     if (changed_at && timer_elapsed32(changed_at) >= SAVE_DELAY_MS) flush();
 }
@@ -158,7 +160,7 @@ bool cu_profile_get(uint8_t slot, cu_profile_t *p) {
 }
 
 bool cu_profile_set(uint8_t slot, const cu_profile_t *p) {
-    if (slot >= CU_PROFILE_SLOTS || p->bar_mode > 12 || p->bar_level > 4 || p->mode >= CU_MODE_COUNT) return false;
+    if (slot >= CU_PROFILE_SLOTS || p->bar_mode > CU_BAR_MODE_LAST || p->bar_level > 4 || p->mode >= CU_MODE_COUNT) return false;
     ext.profile[slot]       = *p;
     ext.profile[slot].valid = true;
     save_profile(slot);

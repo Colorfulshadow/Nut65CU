@@ -1,4 +1,4 @@
-// Copyright 2026
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // External SPI flash outside the wear-leveled EEPROM. QMK's flash driver (flash_spi.c)

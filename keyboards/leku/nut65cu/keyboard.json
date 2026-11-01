@@ -1,7 +1,7 @@
 {
     "manufacturer": "LEKU",
     "keyboard_name": "NUT65 CU",
-    "maintainer": "sdk66",
+    "maintainer": "Colorfulshadow",
     "bootloader": "wb32-dfu",
     "bootmagic": {
         "matrix": [0, 0]

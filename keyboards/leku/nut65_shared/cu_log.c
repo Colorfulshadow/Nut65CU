@@ -1,4 +1,4 @@
-// Copyright 2026
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // Event log for checking battery life and sleep behaviour: what the keyboard did and
@@ -218,10 +218,13 @@ void cu_log_task(void) {
     }
 }
 
-void cu_log_before_sleep(void) {
+cu_log_sleep_reason_t cu_log_sleep_reason(void) {
     uint32_t timeout = lpwr_timeout_value_read();
-    uint16_t reason  = lower_sleep ? CU_SLEEP_BATTERY : (timeout && last_input_activity_elapsed() >= timeout) ? CU_SLEEP_IDLE : CU_SLEEP_REQUEST;
-    cu_log_event(CU_LOG_SLEEP, reason);
+    return lower_sleep ? CU_SLEEP_BATTERY : (timeout && last_input_activity_elapsed() >= timeout) ? CU_SLEEP_IDLE : CU_SLEEP_REQUEST;
+}
+
+void cu_log_before_sleep(void) {
+    cu_log_event(CU_LOG_SLEEP, cu_log_sleep_reason());
     stop_returns = 0;
 }
 

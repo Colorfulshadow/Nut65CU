@@ -1,7 +1,7 @@
-// Copyright 2026
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
-// CU raw HID commands and the typed status report (Fn+I).
+// CU raw HID commands, the bootloader request and the typed status report (Fn+I).
 
 #include QMK_KEYBOARD_H
 #include <string.h>
@@ -13,7 +13,9 @@
 #include "cu_keys.h"
 #include "cu_profile.h"
 #include "cu_host.h"
+#include "cu_timer.h"
 #include "cu_mode.h"
+#include "cu_overlay.h"
 
 // nut65cu.c / wls.c
 extern bool     charging_state;
@@ -47,6 +49,12 @@ static uint32_t get32(const uint8_t *p) {
     return v;
 }
 
+// [0] CU_HID_CMD [1] CU_HID_EVENT [2] 0 [3] event [4] arg, see cu_host.h.
+static void send_event(cu_hid_event_t event, uint8_t arg) {
+    uint8_t ev[32] = {CU_HID_CMD, CU_HID_EVENT, CU_HID_OK, event, arg};
+    replaced_hid_send(ev, sizeof(ev));
+}
+
 static uint8_t link_state(void) {
     return wireless_get_current_devs() == DEVS_USB ? 0x10 + USB_DRIVER.state : *md_getp_state();
 }
@@ -58,6 +66,9 @@ static uint8_t log2_size(void) {
 }
 
 /* ---------- raw HID ---------- */
+
+static cu_hid_status_t boot_request(uint8_t *p); // bootloader request, below
+static void            boot_cancel(void);
 
 // Fills p[0..27] (reply bytes 3-30).
 static void info(uint8_t *p) {
@@ -79,13 +90,30 @@ static void info(uint8_t *p) {
     p[24] = id;
     p[25] = cu_profile_active();
     p[26] = cu_mode_debounce();
-    p[27] = hs_rl_mode_get() | hs_rl_level_get() << 4;
+    p[27] = (hs_rl_mode_get() & 15) | hs_rl_level_get() << 4 | (hs_rl_mode_get() >> 4) << 7; // mode bit 4 in bit 7 (protocol 5)
+}
+
+// INFO page 1 (protocol 4): the model this firmware was built for and its LEDs.
+// [0] protocol [1] page (1) [2] model (1 NUT65 CU, 2 NUT65 with per-key RGB) [3..4] LED count
+// [5] key LEDs a host may set with KEY_LIGHT (0: none) [6] first bar LED [7] bar LEDs
+// [8] host light flags: bit0 IND (Q-T), bit1 KEY_LIGHT, bit2 BAR. The rest is 0.
+static void info_model(uint8_t *p) {
+    memset(p, 0, 28);
+    p[0] = CU_HID_PROTOCOL;
+    p[1] = 1;
+    p[2] = NUT65_MODEL_ID;
+    put16(&p[3], RGB_MATRIX_LED_COUNT);
+    p[5] = NUT65_KEY_LEDS;
+    p[6] = HS_RGB_STRIP_START;
+    p[7] = RGBLED_NUM;
+    p[8] = 1 << 0 | (NUT65_KEY_LEDS ? 1 << 1 : 0) | 1 << 2;
 }
 
 static cu_hid_status_t handle(uint8_t sub, const uint8_t *arg, uint8_t *p) {
     switch (sub) {
         case CU_HID_INFO:
-            info(p);
+            if (arg[0] == 1) info_model(p);
+            else info(p); // page 0, also what hosts before protocol 4 get (they send 0)
             return CU_HID_OK;
         case CU_HID_BUILD:
             strncpy((char *)p, QMK_BUILDDATE, 27);
@@ -171,6 +199,33 @@ static cu_hid_status_t handle(uint8_t sub, const uint8_t *arg, uint8_t *p) {
             cu_log_init();
             cu_keys_init();
             return CU_HID_OK;
+        case CU_HID_BAR: {
+            _Static_assert(sizeof(cu_bar_layer_t) <= 28, "cu_bar_layer_t must fit the arguments");
+            cu_bar_layer_t layer;
+            memcpy(&layer, arg, sizeof(layer));
+            return cu_overlay_bar_set(&layer) ? CU_HID_OK : CU_HID_BAD_ARGUMENT;
+        }
+        case CU_HID_IND: {
+            cu_host_ind_t ind;
+            memcpy(&ind, arg, sizeof(ind));
+            return cu_overlay_ind_set(&ind) ? CU_HID_OK : CU_HID_BAD_ARGUMENT;
+        }
+#if NUT65_KEY_LEDS
+        case CU_HID_KEY_LIGHT: {
+            cu_host_ind_t key;
+            memcpy(&key, arg, sizeof(key));
+            return cu_overlay_key_set(&key) ? CU_HID_OK : CU_HID_BAD_ARGUMENT;
+        }
+#endif
+        case CU_HID_LIGHT_CLEAR:
+            cu_overlay_clear();
+            return CU_HID_OK;
+        case CU_HID_BOOT_REQUEST:
+            if (get32(arg) != CU_HID_BOOT_MAGIC) return CU_HID_BAD_ARGUMENT;
+            return boot_request(p);
+        case CU_HID_BOOT_CANCEL:
+            boot_cancel();
+            return CU_HID_OK;
         default:
             return CU_HID_BAD_COMMAND;
     }
@@ -185,6 +240,139 @@ bool cu_host_hid(uint8_t *data, uint8_t length) {
     data[2] = handle(data[1], arg, &data[3]);
     replaced_hid_send(data, length);
     return true;
+}
+
+/* ---------- link to the computer ---------- */
+
+// Host lights belong to the computer on the other end of the link: they go when the link
+// drops (device switched, computer asleep, keyboard asleep), and once it is back the host
+// is told, so a host program can put its lights back without polling a sleeping keyboard.
+#define LINK_EVENT_DELAY_MS 500 // let a fresh 2.4G / USB link settle first
+
+static bool     link_was_up;
+static uint8_t  link_devs = 0xFF;
+static uint32_t link_up_since; // LINK_UP not sent yet, 0 = nothing to send
+
+static bool link_up(void) {
+    return wireless_get_current_devs() == DEVS_USB ? USB_DRIVER.state == USB_ACTIVE : *md_getp_state() == MD_STATE_CONNECTED;
+}
+
+static void link_task(void) {
+    uint8_t devs = wireless_get_current_devs();
+    bool    up   = link_up() && devs == link_devs;
+    link_devs    = devs;
+
+    if (!up) {
+        if (link_was_up) cu_overlay_clear();
+        link_was_up   = false;
+        link_up_since = 0;
+        return;
+    }
+    if (!link_was_up) {
+        link_was_up   = true;
+        link_up_since = cu_timer_start();
+    }
+    if (link_up_since && timer_elapsed32(link_up_since) >= LINK_EVENT_DELAY_MS) {
+        link_up_since = 0;
+        send_event(CU_HID_EVENT_LINK_UP, devs);
+    }
+}
+
+/* ---------- bootloader request ---------- */
+
+// CU_HID_BOOT_REQUEST: the computer wants to update the firmware, but the keyboard only
+// goes into the bootloader once the user agrees on the keyboard itself. The light bar
+// blinks amber (cu_draw_bar) and the next key press decides: the top-left key, Esc,
+// enters the bootloader, any other key says no. It goes by the matrix position, so a
+// remapped Esc still works, and that press (and its release) never reaches the
+// computer. The computer is told the answer with a BOOT event; if the link drops
+// (device switched, USB suspended or unplugged) or the keyboard sleeps, the request is
+// dropped without one. USB only: the WB32 bootloader (DFU) only talks USB.
+#define BOOT_ANSWER_MS     10000
+#define BOOT_JUMP_DELAY_MS 100 // let the BOOT event go out first
+#define BOOT_KEY_ROW       0   // Esc
+#define BOOT_KEY_COL       0
+
+static uint32_t boot_since;      // request waiting for the user since, 0 = none
+static uint32_t boot_jump_since; // Esc pressed: bootloader soon, 0 = not
+static bool     boot_key_down;   // the key that answered is still held: drop its release too
+static keypos_t boot_key;
+
+static bool boot_usb_ok(void) {
+    return wireless_get_current_devs() == DEVS_USB && USB_DRIVER.state == USB_ACTIVE;
+}
+
+static cu_hid_status_t boot_request(uint8_t *p) {
+    if (!boot_usb_ok() || boot_jump_since) return CU_HID_FAILED;
+    boot_since = cu_timer_start(); // a new request starts the time again
+    p[0]       = BOOT_ANSWER_MS / 1000;
+    return CU_HID_OK;
+}
+
+static void boot_cancel(void) {
+    boot_since      = 0;
+    boot_jump_since = 0; // also in the last 100 ms: staying out of the bootloader is the safe side
+}
+
+uint32_t cu_host_boot_waiting(void) {
+    return boot_since;
+}
+
+bool cu_host_boot_key(keyrecord_t *record) {
+    keypos_t k    = record->event.key;
+    bool     same = boot_key_down && k.row == boot_key.row && k.col == boot_key.col;
+
+    if (!record->event.pressed) {
+        if (!same) return true;
+        boot_key_down = false;
+        return false;
+    }
+    if (same) boot_key_down = false; // its release went missing: don't eat the next one
+    if (!boot_since) return true;
+
+    bool yes      = IS_KEYEVENT(record->event) && k.row == BOOT_KEY_ROW && k.col == BOOT_KEY_COL;
+    boot_since    = 0;
+    boot_key_down = true;
+    boot_key      = k;
+    send_event(CU_HID_EVENT_BOOT, yes ? CU_HID_BOOT_YES : CU_HID_BOOT_NO);
+    if (yes) boot_jump_since = cu_timer_start();
+    return false;
+}
+
+static void boot_task(void) {
+    if (!boot_usb_ok()) { // nobody left to answer, and no USB for the bootloader
+        boot_cancel();
+        return;
+    }
+    if (boot_jump_since && timer_elapsed32(boot_jump_since) >= BOOT_JUMP_DELAY_MS) {
+        // Keep the key counts since the last snapshot, as before sleep.
+        if (cu_keys_dirty()) cu_keys_save();
+        cu_store_wait();
+        // As QK_BOOT does (nut65cu.c): no eeconfig_disable(), the settings stay.
+        bootloader_jump();
+    }
+    if (boot_since && timer_elapsed32(boot_since) >= BOOT_ANSWER_MS) {
+        boot_since = 0;
+        send_event(CU_HID_EVENT_BOOT, CU_HID_BOOT_TIMEOUT);
+    }
+}
+
+/* ---------- sleep ---------- */
+
+void cu_host_before_sleep(void) {
+    // Tell the computer first, so a host program stops asking a sleeping keyboard. Best
+    // effort: over the air it is only queued for the module (md_send_raw, which never
+    // blocks), and the module has until the MCU stops (LPWR_STOP_DELAY, 200 ms) to send it;
+    // on USB the board never sleeps with the link up. Not for a requested sleep: with the
+    // link up that is the 2.4G receiver reporting its computer asleep, and a report then
+    // could wake the computer.
+    cu_log_sleep_reason_t reason = cu_log_sleep_reason();
+    if (link_was_up && link_up() && reason != CU_SLEEP_REQUEST) send_event(CU_HID_EVENT_SLEEP, reason);
+
+    boot_cancel();
+    cu_overlay_clear(); // the clock stops while asleep: lights would outlive their time
+    link_was_up   = false; // announce the link again after waking
+    link_up_since = 0;
 }
 
 /* ---------- typed status report ---------- */
@@ -312,6 +500,9 @@ void cu_host_key_event(uint16_t keycode, keyrecord_t *record) {
 }
 
 void cu_host_task(void) {
+    link_task();
+    boot_task();
+
     if (!report_len || !timer_expired32(timer_read32(), report_next)) return;
     // Wireless reports go through the module's UART queue: leave it time to drain.
     report_next = timer_read32() + (wireless_get_current_devs() == DEVS_USB ? 4 : 15);

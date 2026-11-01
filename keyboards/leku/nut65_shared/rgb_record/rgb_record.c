@@ -1,4 +1,5 @@
 // Copyright 2024 yangzheng20003 (@yangzheng20003)
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "rgb_record.h"
@@ -449,10 +450,18 @@ void query(void) {
 #else
         rgb_matrix_set_color_all(0x00, 0x00, 0x00);
 #endif
+#if !NUT65_KEY_LEDS
         // NUT65 CU: 10 segments of RGBLED_NUM / 10 LEDs along the light bar, one per 10 %.
         for (uint8_t i = 0; i < RGBLED_NUM; i++) {
             uint8_t led = HS_RGB_STRIP_START + i;
             uint8_t seg = i / (RGBLED_NUM / 10);
+#else
+        // Per-key models: the number row keys 1-0, one per 10 % (OEM NUT65).
+        for (uint8_t i = 0; i < 10; i++) {
+            static const uint8_t bat_map[10] = RGB_MATRIX_BAT_INDEX_MAP;
+            uint8_t led = bat_map[i];
+            uint8_t seg = i;
+#endif
             if ((seg < (*md_getp_bat() / 10)) || (seg < 1)) {
                 if (*md_getp_bat() >= (IM_BAT_REQ_LEVEL1_VAL)) {
                     rgb_matrix_set_color(led, IM_BAT_REQ_LEVEL1_COLOR);

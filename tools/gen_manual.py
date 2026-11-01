@@ -73,7 +73,13 @@ LEDS = {(1, 5): "T", (1, 4): "R", (1, 3): "E", (1, 2): "W", (1, 1): "Q", (2, 0):
 MODES = [
     ("rainbow", "彩虹→"), ("rainbow", "←彩虹"), ("rainbow", "中心"), ("breath", "呼吸"),
     ("#EF4444", "红"), ("#F97316", "橙"), ("#EAB308", "黄"), ("#22C55E", "绿"), ("#06B6D4", "青"),
-    ("#3B82F6", "蓝"), ("#A855F7", "紫"), ("#FFFFFF", "白"), ("off", "关"),
+    ("#3B82F6", "蓝"), ("#A855F7", "紫"), ("#FFFFFF", "白"),
+]
+# modes 13-24 (firmware protocol 5), then off: Fn + Backspace goes 0-11, 13-24, off
+MODES_FX = [
+    ("#FDE68A", "星光"), ("#60A5FA", "涟漪"), ("rainbow", "余晖"), ("#F97316", "热度"), ("#1E3A8A", "星空"), ("#93C5FD", "流星"),
+    ("#34D399", "极光"), ("#EF4444", "火焰"), ("#0EA5E9", "海浪"), ("#A78BFA", "雨滴"), ("#DC2626", "扫描"), ("#D39B73", "隙光"),
+    ("off", "关"),
 ]
 
 TOMATO, GREEN, WHITE, RED, BLUE, YELLOW = "#F05A3C", "#22C55E", "#FFFFFF", "#EF4444", "#3B82F6", "#EAB308"
@@ -90,10 +96,12 @@ CARDS_TOP = [
         ("text", "设备名：NUT65 CU BT1–3 · NUT65 CU 2.4G"),
     ]),
     ("灯带", "light", [
-        ("kv", "Fn + Backspace", "切换灯带模式（13 种，依次为）"),
-        ("modes",),
+        ("kv", "Fn + Backspace", "切换灯带模式（25 种，依次为）"),
+        ("modes", MODES),
+        ("modes", MODES_FX),
+        ("text", "星光、涟漪、余晖、热度随按键：按下的键在灯带对应位置亮起。"),
         ("kv", "Fn + ↑ / ↓", "亮度 5 档（Fn + PgUp / PgDn 相同）"),
-        ("kv", "Fn + ← / →", "彩虹流动速度 5 档"),
+        ("kv", "Fn + ← / →", "动画速度 5 档（彩虹与星空、流星等环境灯效）"),
         ("kv", "Fn + Del", "音乐律动（再按换图案，Fn+Backspace 退出）"),
         ("kv", "Fn + Ins", "音乐律动灵敏度校准"),
     ]),
@@ -281,8 +289,9 @@ def layout_card(title, cat, rows, width):
                 for i, ln in enumerate(lines):
                     out.append(text(xx, yy + 14 + i * 19, ln, 13, "#64748B"))
             elif kind == "modes":
-                step = (width - 2 * pad - 4) / len(MODES)
-                for i, (c, lab) in enumerate(MODES):
+                modes = r[1] if len(r) > 1 else MODES
+                step = (width - 2 * pad - 4) / len(modes)
+                for i, (c, lab) in enumerate(modes):
                     cx = xx + i * step + step / 2
                     out.append(swatch(cx - 11, yy, c, 22))
                     out.append(text(cx, yy + 38, lab, 11, "#475569", 400, "middle"))

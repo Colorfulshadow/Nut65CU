@@ -205,8 +205,10 @@ class RawDevice:
         return buf.raw[1:n]  # drop report id
 
     def request(self, data, timeout_ms=1000):
-        """Send one 32-byte report and wait for the reply to the same command byte."""
+        """Send one 32-byte report and wait for the reply to the same command byte
+        (and, for CU commands, the same sub-command: the keyboard also sends events)."""
         self.write(data, timeout_ms)
+        want = bytes(data[:2]) if data[0] == CU else bytes(data[:1])
         deadline = time.monotonic() + timeout_ms / 1000
         while True:
             left = int((deadline - time.monotonic()) * 1000)
@@ -215,7 +217,7 @@ class RawDevice:
             reply = self.read(left)
             if reply is None:
                 return None
-            if reply[:1] == bytes(data[:1]) or reply[:1] == b"\xff":
+            if reply[:len(want)] == want or reply[:1] == b"\xff":
                 return reply
 
 
@@ -272,7 +274,7 @@ MODE_ARGS = {"normal": 0, "eco": 1, "game": 2}
 VIA_CUSTOM_SET, VIA_CUSTOM_GET, ID_CU_MODE = 0x07, 0x08, 0x10
 WAKE = {0: "none", 1: "key", 2: "module UART", 3: "cable", 4: "USB", 5: "one key", 6: "encoder", 7: "switch"}
 SLEEP_REASON = {0: "idle", 1: "requested", 2: "battery empty"}
-LOG_TYPES = {1: "BOOT", 2: "SLEEP", 3: "WAKE", 4: "BATTERY", 5: "CABLE", 6: "CHARGED", 7: "DEVICE", 8: "LINK", 9: "TIME", 10: "MARK", 11: "MODE"}
+LOG_TYPES = {1: "BOOT", 2: "SLEEP", 3: "WAKE", 4: "BATTERY", 5: "CABLE", 6: "CHARGED", 7: "DEVICE", 8: "LINK", 9: "TIME", 10: "MARK", 11: "MODE", 12: "USB_RETRY"}
 JEDEC_VENDOR = {0xEF: "Winbond", 0xC8: "GigaDevice", 0x85: "Puya", 0x0B: "XTX", 0x20: "XMC", 0x5E: "Zbit", 0x68: "Boya", 0x9D: "ISSI", 0xC2: "Macronix", 0x1C: "EON"}
 
 LAYOUT = [  # (row, col, x, y, width, label), from keyboard.json and the default keymap
@@ -496,6 +498,8 @@ def describe(rec):
         return f"mark {arg}"
     if t == 11:
         return f"mode -> {MODES[arg] if arg < len(MODES) else arg}"
+    if t == 12:
+        return "USB not configured, gave up: back to wireless" if arg == 0xFF else f"USB not configured, restart #{arg}"
     return LOG_TYPES.get(t, f"type {t}").lower()
 
 
@@ -752,9 +756,12 @@ def cmd_flash_dump(args):
             sys.exit("no external flash reported")
         data = bytearray()
         t0 = time.monotonic()
-        for addr in range(args.start, args.start + size, 24):
-            p = cu(dev, CU_FLASH_READ, struct.pack("<I", addr))
-            data += p[4:28]
+        end = args.start + size
+        for addr in range(args.start, end, 24):
+            # the firmware rejects reads past the end: read the last partial chunk from end - 24
+            at = min(addr, end - 24)
+            p = cu(dev, CU_FLASH_READ, struct.pack("<I", at))
+            data += p[4 + addr - at:28]
             if len(data) % (24 * 2000) == 0:
                 print(f"  {len(data) // 1024} KB...", file=sys.stderr)
         data = data[:size]

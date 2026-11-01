@@ -1,4 +1,5 @@
 // Copyright 2024 sdk66 (@sdk66)
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #pragma once
@@ -25,6 +26,9 @@
  * (brightness/speed limits, Win/Mac, debounce, music) flashes the light bar
  * instead: those blink entries use pseudo indices >= HS_RGB_STRIP_BLINK_BASE,
  * which nut65cu.c paints across the bar. */
+// Model of the shared NUT65 firmware (keyboards/leku/nut65_shared): INFO page 1 reports it.
+#define NUT65_MODEL_ID                      1  // NUT65 CU
+#define NUT65_KEY_LEDS                      0  // no per-key LEDs: the 8 key LEDs are status indicators
 #define HS_RGB_INDICATOR_COUNT              8
 #define HS_RGB_STRIP_START                  HS_RGB_INDICATOR_COUNT
 #define HS_RGB_STRIP_BLINK_BASE             240
@@ -110,8 +114,14 @@
 /* Flash */
 #define EXTERNAL_FLASH_SPI_SLAVE_SELECT_PIN C12
 #define WEAR_LEVELING_LOGICAL_SIZE          (WEAR_LEVELING_BACKING_SIZE / 2)
-#define VIA_EEPROM_ALLOW_RESET 
+#define VIA_EEPROM_ALLOW_RESET
 #define DYNAMIC_KEYMAP_MACRO_COUNT 32
+// VIA keeps its keymap and macros only while a 3-byte magic in EEPROM matches. QMK makes
+// it from the build date, so every firmware built on another day reset them; this fixed
+// one (VIA_EEPROM_MAGIC_BYTE, quantum/via.h) survives updates. 0xC5 is never a BCD date byte, so the first flash
+// with it resets the VIA keymap and macros once. Bump the last byte only when the dynamic
+// keymap / macro EEPROM layout changes (layers, macro count or size, layout options).
+#define VIA_EEPROM_MAGIC_FIXED 0xC5, 0x43, 0x01
 
 /* RGB Matrix */
 #define WS2812_BYTE_ORDER WS2812_BYTE_ORDER_GRB

@@ -1,4 +1,5 @@
 // Copyright 2024 sdk66 (@sdk66)
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include QMK_KEYBOARD_H

@@ -3,6 +3,7 @@
 Weikav / LEKU NUT65 CU (copper case, no per-key RGB: 8 indicator LEDs and an 80-LED light bar).
 Ported from the OEM `leku/nut65` source by hangshengkeji, with fixes and light bar features.
 
+* Keyboard Maintainer: [Colorfulshadow](https://github.com/Colorfulshadow)
 * Hardware Supported: NUT65 CU (`342D:E545`)
 * Based on: [hangshengkeji/qmk_firmware](https://github.com/hangshengkeji/qmk_firmware) `keyboards/leku/nut65`
 

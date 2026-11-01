@@ -1,4 +1,4 @@
-// Copyright 2026
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // Per-device settings: each connection (USB, BT1-5, 2.4G) remembers its own Win/Mac

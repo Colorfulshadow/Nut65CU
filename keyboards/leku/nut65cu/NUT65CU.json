@@ -70,6 +70,54 @@
                 [
                   "Off",
                   12
+                ],
+                [
+                  "Starlight (keys)",
+                  13
+                ],
+                [
+                  "Ripple (keys)",
+                  14
+                ],
+                [
+                  "Afterglow (keys)",
+                  15
+                ],
+                [
+                  "Typing heat (keys)",
+                  16
+                ],
+                [
+                  "Starry sky",
+                  17
+                ],
+                [
+                  "Meteor",
+                  18
+                ],
+                [
+                  "Aurora",
+                  19
+                ],
+                [
+                  "Fire",
+                  20
+                ],
+                [
+                  "Ocean",
+                  21
+                ],
+                [
+                  "Raindrops",
+                  22
+                ],
+                [
+                  "Scanner",
+                  23
+                ],
+                [
+                  "Gap light",
+                  24
                 ]
               ]
             },

@@ -1,4 +1,4 @@
-// Copyright 2026
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // NUT65 CU light bar features:
@@ -9,7 +9,10 @@
 //   Fn+P  (CU_MODE)   normal -> power save -> game mode (cu_mode.c)
 //   plus a low-battery alert on the bar and switching to USB while a cable is plugged in,
 //   and it starts and runs the rest: external flash, event log, key counters, per-device
-//   settings and the raw HID commands (cu_store/log/keys/profile/host.c).
+//   settings, the raw HID commands and the computer's lights (cu_store/log/keys/profile/host/overlay.c),
+//   and blinks the bar while a bootloader request from the computer waits for Esc (cu_host.c),
+//   and draws the added light bar effects 13-24 (cu_barfx.c),
+//   and plays the easter eggs (cu_egg.c: typed sequences, key count milestones, WPM records, pomodoro sets).
 //
 // Everything on the bar is drawn at the bar brightness (hs_strip_val(), at most 75):
 // 80 LEDs at full brightness draw enough current to make the LED boost converter whine.
@@ -19,12 +22,16 @@
 #include "usb_main.h"
 #include "lib/lib8tion/lib8tion.h"
 #include "cu_features.h"
+#include "cu_timer.h"
 #include "cu_store.h"
 #include "cu_log.h"
 #include "cu_keys.h"
 #include "cu_profile.h"
 #include "cu_host.h"
 #include "cu_mode.h"
+#include "cu_overlay.h"
+#include "cu_egg.h"
+#include "cu_barfx.h"
 
 extern bool    charging_state; // nut65cu.c: USB cable present (HS_BAT_CABLE_PIN)
 extern uint8_t hs_strip_val(void);
@@ -37,6 +44,7 @@ extern void    hs_rl_level_set(uint8_t level);
 
 #define HUE_RED    0
 #define HUE_WORK   6  // tomato
+#define HUE_AMBER  22 // bootloader request
 #define HUE_YELLOW 36
 #define HUE_GREEN  85
 
@@ -44,9 +52,15 @@ extern void    hs_rl_level_set(uint8_t level);
 #define WPM_PEAK_HOLD_MS      1500 // peak marker stays this long, then falls
 #define WPM_PEAK_FALL_MS      40   // ... one LED per this many ms
 #define AUTO_USB_DEBOUNCE_MS  200
-#define AUTO_USB_HOST_WAIT_MS 5000 // no USB host by then (charger only): go back to wireless
+#define USB_LINK_WAIT_MS      5000 // a host normally configures the board within a second, but Windows sometimes takes 3-4 s:
+                                   // restarting USB then only interrupts it (seen 2026-10-31: 3 s, two restarts, gave up)
+#define USB_LINK_RESTARTS     2    // USB restarts before a cable-triggered switch gives up
 #define LOW_BAT_GRACE_MS      10000 // battery level isn't known right after boot
 #define BAR_SPEED_MIN         55    // the OEM speed keys step 55, 95, ... 215
+#define BOOT_BLINK_MS         250   // bootloader request: on / off this long, 2 Hz
+#define WPM_RECORD_MIN        40    // a record is only celebrated once the old one is at least this
+#define WPM_RECORD_HOLD_MS    1500  // ... and after typing faster than it for this long
+#define POMO_SET              4     // pomodoros in a row that earn the harvest show
 
 /* ---------- settings ---------- */
 
@@ -75,6 +89,7 @@ static void settings_load(void) {
     cu.pomo_break = MAX(1, MIN(cu.pomo_break, 30));
     cu.wpm_full   = MAX(40, MIN(cu.wpm_full, 200));
     if (cu.auto_prev_devs > DEVS_2G4) cu.auto_prev_devs = DEVS_USB;
+    if (cu.bar_fx > CU_BARFX_COUNT) cu.bar_fx = 0;
 }
 
 /* ---------- light bar helpers ---------- */
@@ -121,6 +136,15 @@ static void flash_draw(void) {
     bar_fill(step % 2 ? (RGB){0} : bar_hsv(flash.hue, flash.sat, hs_strip_val()));
 }
 
+// A bootloader request from the computer (cu_host.c) waits for Esc: amber at 2 Hz over
+// everything, starting lit, until it is answered, cancelled or times out.
+static void boot_request_draw(void) {
+    uint32_t since = cu_host_boot_waiting();
+    if (!since) return;
+    bool lit = timer_elapsed32(since) / BOOT_BLINK_MS % 2 == 0;
+    bar_fill(lit ? bar_hsv(HUE_AMBER, 255, hs_strip_val()) : (RGB){0});
+}
+
 /* ---------- pomodoro ---------- */
 
 typedef enum { POMO_IDLE, POMO_WORK, POMO_BREAK } pomo_phase_t;
@@ -129,6 +153,7 @@ static pomo_phase_t pomo_phase = POMO_IDLE;
 static uint32_t     pomo_start, pomo_len;
 static uint32_t     pomo_key_down; // when Fn+; went down, 0 when up
 static bool         pomo_key_long;
+static uint8_t      pomo_done; // work phases finished in a row (skipping one doesn't count; stopping resets)
 
 static void pomo_begin(pomo_phase_t phase) {
     pomo_phase = phase;
@@ -140,6 +165,7 @@ static void pomo_begin(pomo_phase_t phase) {
 static void pomo_task(void) {
     if (pomo_key_down && !pomo_key_long && timer_elapsed32(pomo_key_down) >= POMO_HOLD_MS) {
         pomo_key_long = true;
+        pomo_done     = 0;
         if (pomo_phase != POMO_IDLE) {
             pomo_phase = POMO_IDLE;
             flash_start(0, 0, 2, 150); // white: stopped
@@ -150,7 +176,8 @@ static void pomo_task(void) {
 
     if (pomo_phase == POMO_WORK) {
         pomo_begin(POMO_BREAK);
-        flash_start(HUE_GREEN, 255, 6, 300); // time for a break
+        if (++pomo_done % POMO_SET == 0) cu_egg_play(CU_EGG_POMO); // a set done: the harvest instead of the flashes
+        else flash_start(HUE_GREEN, 255, 6, 300);                  // time for a break
     } else {
         pomo_phase = POMO_IDLE;
         flash_start(HUE_WORK, 255, 6, 300); // break over, Fn+; starts the next round
@@ -212,6 +239,39 @@ static void wpm_draw(void) {
     }
 }
 
+// Typing faster than ever: the fastest WPM of each burst of typing is kept once the
+// typing stops (one settings write per new record); beating an established record for
+// WPM_RECORD_HOLD_MS plays the gold sweep once per burst.
+static void wpm_record_task(void) {
+    static uint32_t last_check, above_since;
+    static uint8_t  peak;
+    static bool     shown;
+
+    if (timer_elapsed32(last_check) < 100) return;
+    last_check  = timer_read32();
+    uint8_t wpm = get_current_wpm();
+    if (wpm == 0) {
+        if (peak > cu.wpm_best) {
+            cu.wpm_best = peak;
+            settings_save();
+        }
+        peak        = 0;
+        above_since = 0;
+        shown       = false;
+        return;
+    }
+    peak = MAX(peak, wpm);
+    if (wpm <= cu.wpm_best || cu.wpm_best < WPM_RECORD_MIN) {
+        above_since = 0;
+        return;
+    }
+    if (!above_since) above_since = cu_timer_start();
+    if (!shown && timer_elapsed32(above_since) >= WPM_RECORD_HOLD_MS) {
+        shown = true;
+        cu_egg_play(CU_EGG_WPM);
+    }
+}
+
 /* ---------- low battery ---------- */
 
 // On battery: 15-30 % two yellow flashes every 30 s, below 15 % four red flashes every 15 s.
@@ -230,7 +290,7 @@ static void low_bat_task(void) {
     uint32_t period   = critical ? 15000 : 30000;
     if (last_alert && timer_elapsed32(last_alert) < period) return;
 
-    last_alert = timer_read32() | 1;
+    last_alert = cu_timer_start();
     flash_start(critical ? HUE_RED : HUE_YELLOW, 255, critical ? 4 : 2, 250);
 }
 
@@ -251,7 +311,6 @@ static void set_auto_prev(uint8_t devs) {
 static void auto_usb_task(void) {
     static bool     started, cable;
     static uint32_t cable_change; // debounce start, 0 = stable
-    static uint32_t host_wait;
 
     uint8_t devs = wireless_get_current_devs();
 
@@ -266,22 +325,13 @@ static void auto_usb_task(void) {
 
     if (cu.auto_prev_devs != DEVS_USB && devs != DEVS_USB) { // changed by hand
         set_auto_prev(DEVS_USB);
-        host_wait = 0;
-    }
-
-    if (host_wait && timer_elapsed32(host_wait) >= AUTO_USB_HOST_WAIT_MS) {
-        host_wait = 0;
-        if (cu.auto_prev_devs != DEVS_USB && USB_DRIVER.state != USB_ACTIVE && USB_DRIVER.state != USB_SUSPENDED) {
-            wireless_devs_change(DEVS_USB, cu.auto_prev_devs, false);
-            set_auto_prev(DEVS_USB);
-        }
     }
 
     if (charging_state == cable) {
         cable_change = 0;
         return;
     }
-    if (!cable_change) cable_change = timer_read32() | 1;
+    if (!cable_change) cable_change = cu_timer_start();
     if (timer_elapsed32(cable_change) < AUTO_USB_DEBOUNCE_MS) return;
     cable_change = 0;
     cable        = charging_state;
@@ -289,14 +339,59 @@ static void auto_usb_task(void) {
     if (cable) {
         if (cu.auto_usb && devs != DEVS_USB) {
             set_auto_prev(devs);
-            host_wait = timer_read32() | 1;
             wireless_devs_change(devs, DEVS_USB, false);
         }
     } else if (cu.auto_prev_devs != DEVS_USB) {
         wireless_devs_change(DEVS_USB, cu.auto_prev_devs, false);
         set_auto_prev(DEVS_USB);
-        host_wait = 0;
     }
+}
+
+// USB link watchdog, on USB with a cable in. Seen 2026-10-14: after switching from 2.4G
+// to USB on a cable, the host never saw the board (no device arrival on the PC). USB sat
+// idle (USB_SUSPENDED), and the OEM rule in transport.c "suspended for 7 s -> sleep" then
+// put the board to sleep every 7 s, cutting off any enumeration, until the cable was
+// replugged. Now, until the host has configured the board once:
+//   - it doesn't sleep (cu_usb_link_pending() in lpwr_is_allow_timeout_hook);
+//   - after USB_LINK_WAIT_MS the USB connection is restarted, like replugging the cable;
+//   - after USB_LINK_RESTARTS restarts, a switch made by plugging the cable in goes back
+//     to the wireless device (also what happens on a charger, which never configures it).
+// Once configured, a suspended USB means the computer is asleep and the OEM rule applies.
+static bool usb_configured; // the host configured the board since this USB + cable session began
+
+bool cu_usb_link_pending(void) {
+    return wireless_get_current_devs() == DEVS_USB && charging_state && !usb_configured;
+}
+
+static void usb_link_task(void) {
+    static uint32_t since; // start of the current wait, 0 = not waiting
+    static uint8_t  restarts;
+
+    if (wireless_get_current_devs() != DEVS_USB || !charging_state) {
+        usb_configured = false;
+        since          = 0;
+        restarts       = 0;
+        return;
+    }
+    if (USB_DRIVER.state == USB_ACTIVE) usb_configured = true;
+    if (usb_configured) return;
+
+    if (!since) since = cu_timer_start();
+    if (timer_elapsed32(since) < USB_LINK_WAIT_MS) return;
+    since = cu_timer_start();
+
+    if (restarts < USB_LINK_RESTARTS) {
+        restarts++;
+        cu_log_event(CU_LOG_USB_RETRY, restarts);
+        usb_power_connect();
+        restart_usb_driver(&USBD1);
+    } else if (cu.auto_prev_devs != DEVS_USB) {
+        uint8_t prev = cu.auto_prev_devs;
+        cu_log_event(CU_LOG_USB_RETRY, 0xFF);
+        set_auto_prev(DEVS_USB);
+        wireless_devs_change(DEVS_USB, prev, false);
+    }
+    // Picked by hand (Fn+T): stay on USB; the next attempt is the user's.
 }
 
 /* ---------- hooks ---------- */
@@ -317,8 +412,13 @@ void cu_features_init(void) {
 
 void cu_features_task(void) {
     // Let the board restore its saved device first (wireless_post_task, 100 ms after boot).
-    if (timer_read32() > 1000) auto_usb_task();
+    if (timer_read32() > 1000) {
+        auto_usb_task();
+        usb_link_task();
+    }
     pomo_task();
+    wpm_record_task();
+    cu_egg_task();
     low_bat_task();
     cu_store_task();
     cu_log_task();
@@ -329,6 +429,7 @@ void cu_features_task(void) {
 }
 
 void cu_features_before_sleep(void) {
+    cu_host_before_sleep();
     cu_log_before_sleep();
     if (cu_keys_dirty()) cu_keys_save();
     cu_store_wait(); // don't stop the clocks in the middle of an erase
@@ -360,7 +461,7 @@ bool cu_process_record(uint16_t keycode, keyrecord_t *record) {
             return false;
         case CU_POMO:
             if (record->event.pressed) {
-                pomo_key_down = timer_read32() | 1;
+                pomo_key_down = cu_timer_start();
                 pomo_key_long = false;
             } else {
                 if (pomo_key_down && !pomo_key_long) {
@@ -386,22 +487,42 @@ bool cu_process_record(uint16_t keycode, keyrecord_t *record) {
 }
 
 void cu_draw_bar(void) {
-    // Power save mode: only alerts and feedback (the flashes) light the bar.
+    // Power save mode: only alerts and feedback (the flashes) and the computer's lights.
     if (cu_mode_bar_dark()) {
         bar_fill((RGB){0});
-        flash_draw();
-        return;
-    }
-
-    bool pomo_shown = pomo_phase != POMO_IDLE && cu.pomo_show;
-
-    // With both on, the pomodoro shows while you're not typing.
-    if (cu.wpm_on && (get_current_wpm() > 0 || !pomo_shown)) {
-        wpm_draw();
     } else {
-        pomo_draw();
+        bool pomo_shown = pomo_phase != POMO_IDLE && cu.pomo_show;
+
+        // The bar's own mode: an added effect replaces what the OEM mode drew.
+        if (cu.bar_fx) cu_barfx_draw(cu.bar_fx);
+
+        // With both on, the pomodoro shows while you're not typing.
+        if (cu.wpm_on && (get_current_wpm() > 0 || !pomo_shown)) {
+            wpm_draw();
+        } else {
+            pomo_draw();
+        }
     }
+    // The computer's lights (cu_overlay.c), bar and Q-T indicators, under the flashes.
+    cu_overlay_draw_bar();
+#if NUT65_KEY_LEDS
+    cu_overlay_draw_keys(); // per-key models: under the Q-T host indicators
+#endif
+    cu_overlay_draw_indicators();
     flash_draw();
+    cu_egg_draw(); // easter egg shows
+    // The keyboard asking whether to enter the bootloader goes over everything.
+    boot_request_draw();
+}
+
+uint8_t cu_bar_fx_get(void) {
+    return cu.bar_fx;
+}
+
+void cu_bar_fx_set(uint8_t fx) {
+    if (fx > CU_BARFX_COUNT || fx == cu.bar_fx) return;
+    cu.bar_fx = fx;
+    settings_save();
 }
 
 bool cu_prevent_sleep(void) {

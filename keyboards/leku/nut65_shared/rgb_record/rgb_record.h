@@ -1,3 +1,4 @@
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 /* Copyright (C) 2023 Westberry Technology Corp., Ltd
  *
  * This program is free software: you can redistribute it and/or modify
@@ -58,8 +59,12 @@
         {HS_BLACK, HS_RED, HS_GREEN, HS_BLUE, HS_YELLOW, HS_PURPLE, HS_CYAN, HS_WHITE}
 #endif
 
+#if !NUT65_KEY_LEDS
 // NUT65 CU: the battery query lights the whole 80-LED bar, so keep it dim.
 #define RGB_MATRIX_BAT_VAL      60
+#else
+#define RGB_MATRIX_BAT_VAL      150
+#endif
 
 #define IM_BAT_REQ_LEVEL1_VAL   50
 #define IM_BAT_REQ_LEVEL1_COLOR 0x00, RGB_MATRIX_BAT_VAL, 0x00

@@ -1,4 +1,4 @@
-// Copyright 2026
+// Copyright 2026 Colorfulshadow (@Colorfulshadow)
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 // Normal / power save / game mode.
@@ -11,6 +11,7 @@
 
 #include QMK_KEYBOARD_H
 #include "cu_mode.h"
+#include "cu_timer.h"
 #include "cu_log.h"
 #include "cu_profile.h"
 
@@ -91,7 +92,7 @@ void cu_mode_indicators(void) {
             return;
         }
     }
-    if (!dark_since) dark_since = timer_read32() | 1;
+    if (!dark_since) dark_since = cu_timer_start();
     if (timer_elapsed32(dark_since) >= ECO_DARK_MS) led_power_set(false);
 }
 

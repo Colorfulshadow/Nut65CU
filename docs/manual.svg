@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1573" viewBox="0 0 1680 1573" font-family="'Microsoft YaHei','PingFang SC','Noto Sans CJK SC','Source Han Sans SC',sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1656" viewBox="0 0 1680 1656" font-family="'Microsoft YaHei','PingFang SC','Noto Sans CJK SC','Source Han Sans SC',sans-serif">
 <defs>
 <linearGradient id="rainbow" x1="0" x2="1" y1="0" y2="0">
 <stop offset="0" stop-color="#EF4444"/><stop offset="0.2" stop-color="#F59E0B"/><stop offset="0.4" stop-color="#22C55E"/>
 <stop offset="0.6" stop-color="#06B6D4"/><stop offset="0.8" stop-color="#3B82F6"/><stop offset="1" stop-color="#A855F7"/></linearGradient>
 <radialGradient id="breath"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.5" stop-color="#F472B6"/><stop offset="1" stop-color="#6366F1"/></radialGradient>
 </defs>
-<rect width="1680" height="1573" fill="#F1F5F9"/>
+<rect width="1680" height="1656" fill="#F1F5F9"/>
 <text x="40.0" y="70.0" font-size="32" font-weight="800" fill="#0F172A" text-anchor="start">NUT65 CU 快捷键与功能速查</text>
 <text x="40.0" y="100.0" font-size="15" font-weight="400" fill="#64748B" text-anchor="start">按住 Fn 再按对应键。标“长按”的需持续按住。彩色键 = 有 Fn 功能，圆点 = 键下方有指示灯。</text>
 <rect x="1524.16" y="84" width="107.84" height="24" rx="12" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.5"/>
@@ -264,8 +264,8 @@
 <text x="1356.0" y="400.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">左 Ctrl 下：红 = 充电中 / 电量低时闪，</text>
 <text x="1356.0" y="420.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">绿 = 已充满</text>
 <text x="1206.0" y="450.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">键盘图里带圆点的 8 个键下方有指示灯；平时熄灭，只显示状态。</text>
-<rect x="40.0" y="554" width="517.3333333333334" height="308" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
-<rect x="40.0" y="554" width="6" height="308" rx="3" fill="#2563EB"/>
+<rect x="40.0" y="554" width="517.3333333333334" height="391" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="40.0" y="554" width="6" height="391" rx="3" fill="#2563EB"/>
 <text x="64.0" y="590.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">连接</text>
 <rect x="64.0" y="612.0" width="126.2" height="26" rx="6" fill="#EFF6FF" stroke="#2563EB" stroke-opacity="0.45"/><text x="73.0" y="629.5" font-size="13" font-weight="600" fill="#1E40AF" text-anchor="start">Fn + Q / W / E</text>
 <text x="202.2" y="630.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">蓝牙 1 / 2 / 3</text>
@@ -278,47 +278,72 @@
 <rect x="64.0" y="756.0" width="98.1" height="26" rx="6" fill="#EFF6FF" stroke="#2563EB" stroke-opacity="0.45"/><text x="73.0" y="773.5" font-size="13" font-weight="600" fill="#1E40AF" text-anchor="start">插上 USB 线</text>
 <text x="202.2" y="774.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">自动切到有线；拔线回到原来的无线设备</text>
 <text x="64.0" y="806.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">设备名：NUT65 CU BT1–3 · NUT65 CU 2.4G</text>
-<rect x="581.3333333333334" y="554" width="517.3333333333334" height="308" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
-<rect x="581.3333333333334" y="554" width="6" height="308" rx="3" fill="#7C3AED"/>
+<rect x="581.3333333333334" y="554" width="517.3333333333334" height="391" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="581.3333333333334" y="554" width="6" height="391" rx="3" fill="#7C3AED"/>
 <text x="605.3" y="590.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">灯带</text>
 <rect x="605.3" y="612.0" width="123.0" height="26" rx="6" fill="#F5F3FF" stroke="#7C3AED" stroke-opacity="0.45"/><text x="614.3" y="629.5" font-size="13" font-weight="600" fill="#5B21B6" text-anchor="start">Fn + Backspace</text>
-<text x="740.4" y="630.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">切换灯带模式（13 种，依次为）</text>
-<rect x="612.5384615384615" y="648" width="22" height="22" rx="4" fill="url(#rainbow)" stroke="#94A3B8" stroke-width="1"/>
-<text x="623.5" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">彩虹→</text>
-<rect x="648.948717948718" y="648" width="22" height="22" rx="4" fill="url(#rainbow)" stroke="#94A3B8" stroke-width="1"/>
-<text x="659.9" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">←彩虹</text>
-<rect x="685.3589743589744" y="648" width="22" height="22" rx="4" fill="url(#rainbow)" stroke="#94A3B8" stroke-width="1"/>
-<text x="696.4" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">中心</text>
-<rect x="721.7692307692308" y="648" width="22" height="22" rx="4" fill="url(#breath)" stroke="#94A3B8" stroke-width="1"/>
-<text x="732.8" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">呼吸</text>
-<rect x="758.1794871794872" y="648" width="22" height="22" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
-<text x="769.2" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">红</text>
-<rect x="794.5897435897436" y="648" width="22" height="22" rx="4" fill="#F97316" stroke="#94A3B8" stroke-width="1"/>
-<text x="805.6" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">橙</text>
-<rect x="831.0" y="648" width="22" height="22" rx="4" fill="#EAB308" stroke="#94A3B8" stroke-width="1"/>
-<text x="842.0" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">黄</text>
-<rect x="867.4102564102565" y="648" width="22" height="22" rx="4" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
-<text x="878.4" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">绿</text>
-<rect x="903.8205128205129" y="648" width="22" height="22" rx="4" fill="#06B6D4" stroke="#94A3B8" stroke-width="1"/>
-<text x="914.8" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">青</text>
-<rect x="940.2307692307693" y="648" width="22" height="22" rx="4" fill="#3B82F6" stroke="#94A3B8" stroke-width="1"/>
-<text x="951.2" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">蓝</text>
-<rect x="976.6410256410256" y="648" width="22" height="22" rx="4" fill="#A855F7" stroke="#94A3B8" stroke-width="1"/>
-<text x="987.6" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">紫</text>
-<rect x="1013.0512820512822" y="648" width="22" height="22" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
-<text x="1024.1" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">白</text>
-<rect x="1049.4615384615386" y="648" width="22" height="22" rx="4" fill="#1E293B"/>
-<text x="1060.5" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">关</text>
-<rect x="605.3" y="702.0" width="101.2" height="26" rx="6" fill="#F5F3FF" stroke="#7C3AED" stroke-opacity="0.45"/><text x="614.3" y="719.5" font-size="13" font-weight="600" fill="#5B21B6" text-anchor="start">Fn + ↑ / ↓</text>
-<text x="740.4" y="720.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">亮度 5 档（Fn + PgUp / PgDn 相同）</text>
-<rect x="605.3" y="738.0" width="101.2" height="26" rx="6" fill="#F5F3FF" stroke="#7C3AED" stroke-opacity="0.45"/><text x="614.3" y="755.5" font-size="13" font-weight="600" fill="#5B21B6" text-anchor="start">Fn + ← / →</text>
-<text x="740.4" y="756.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">彩虹流动速度 5 档</text>
-<rect x="605.3" y="774.0" width="79.4" height="26" rx="6" fill="#F5F3FF" stroke="#7C3AED" stroke-opacity="0.45"/><text x="614.3" y="791.5" font-size="13" font-weight="600" fill="#5B21B6" text-anchor="start">Fn + Del</text>
-<text x="740.4" y="792.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">音乐律动（再按换图案，Fn+Backspace 退出）</text>
-<rect x="605.3" y="810.0" width="79.4" height="26" rx="6" fill="#F5F3FF" stroke="#7C3AED" stroke-opacity="0.45"/><text x="614.3" y="827.5" font-size="13" font-weight="600" fill="#5B21B6" text-anchor="start">Fn + Ins</text>
-<text x="740.4" y="828.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">音乐律动灵敏度校准</text>
-<rect x="1122.6666666666667" y="554" width="517.3333333333334" height="308" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
-<rect x="1122.6666666666667" y="554" width="6" height="308" rx="3" fill="#EA580C"/>
+<text x="740.4" y="630.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">切换灯带模式（25 种，依次为）</text>
+<rect x="614.0555555555555" y="648" width="22" height="22" rx="4" fill="url(#rainbow)" stroke="#94A3B8" stroke-width="1"/>
+<text x="625.1" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">彩虹→</text>
+<rect x="653.5" y="648" width="22" height="22" rx="4" fill="url(#rainbow)" stroke="#94A3B8" stroke-width="1"/>
+<text x="664.5" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">←彩虹</text>
+<rect x="692.9444444444445" y="648" width="22" height="22" rx="4" fill="url(#rainbow)" stroke="#94A3B8" stroke-width="1"/>
+<text x="703.9" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">中心</text>
+<rect x="732.3888888888889" y="648" width="22" height="22" rx="4" fill="url(#breath)" stroke="#94A3B8" stroke-width="1"/>
+<text x="743.4" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">呼吸</text>
+<rect x="771.8333333333334" y="648" width="22" height="22" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
+<text x="782.8" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">红</text>
+<rect x="811.2777777777778" y="648" width="22" height="22" rx="4" fill="#F97316" stroke="#94A3B8" stroke-width="1"/>
+<text x="822.3" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">橙</text>
+<rect x="850.7222222222222" y="648" width="22" height="22" rx="4" fill="#EAB308" stroke="#94A3B8" stroke-width="1"/>
+<text x="861.7" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">黄</text>
+<rect x="890.1666666666667" y="648" width="22" height="22" rx="4" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
+<text x="901.2" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">绿</text>
+<rect x="929.6111111111111" y="648" width="22" height="22" rx="4" fill="#06B6D4" stroke="#94A3B8" stroke-width="1"/>
+<text x="940.6" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">青</text>
+<rect x="969.0555555555557" y="648" width="22" height="22" rx="4" fill="#3B82F6" stroke="#94A3B8" stroke-width="1"/>
+<text x="980.1" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">蓝</text>
+<rect x="1008.5" y="648" width="22" height="22" rx="4" fill="#A855F7" stroke="#94A3B8" stroke-width="1"/>
+<text x="1019.5" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">紫</text>
+<rect x="1047.9444444444446" y="648" width="22" height="22" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
+<text x="1058.9" y="686.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">白</text>
+<rect x="612.5384615384615" y="702" width="22" height="22" rx="4" fill="#FDE68A" stroke="#94A3B8" stroke-width="1"/>
+<text x="623.5" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">星光</text>
+<rect x="648.948717948718" y="702" width="22" height="22" rx="4" fill="#60A5FA" stroke="#94A3B8" stroke-width="1"/>
+<text x="659.9" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">涟漪</text>
+<rect x="685.3589743589744" y="702" width="22" height="22" rx="4" fill="url(#rainbow)" stroke="#94A3B8" stroke-width="1"/>
+<text x="696.4" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">余晖</text>
+<rect x="721.7692307692308" y="702" width="22" height="22" rx="4" fill="#F97316" stroke="#94A3B8" stroke-width="1"/>
+<text x="732.8" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">热度</text>
+<rect x="758.1794871794872" y="702" width="22" height="22" rx="4" fill="#1E3A8A" stroke="#94A3B8" stroke-width="1"/>
+<text x="769.2" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">星空</text>
+<rect x="794.5897435897436" y="702" width="22" height="22" rx="4" fill="#93C5FD" stroke="#94A3B8" stroke-width="1"/>
+<text x="805.6" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">流星</text>
+<rect x="831.0" y="702" width="22" height="22" rx="4" fill="#34D399" stroke="#94A3B8" stroke-width="1"/>
+<text x="842.0" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">极光</text>
+<rect x="867.4102564102565" y="702" width="22" height="22" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
+<text x="878.4" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">火焰</text>
+<rect x="903.8205128205129" y="702" width="22" height="22" rx="4" fill="#0EA5E9" stroke="#94A3B8" stroke-width="1"/>
+<text x="914.8" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">海浪</text>
+<rect x="940.2307692307693" y="702" width="22" height="22" rx="4" fill="#A78BFA" stroke="#94A3B8" stroke-width="1"/>
+<text x="951.2" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">雨滴</text>
+<rect x="976.6410256410256" y="702" width="22" height="22" rx="4" fill="#DC2626" stroke="#94A3B8" stroke-width="1"/>
+<text x="987.6" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">扫描</text>
+<rect x="1013.0512820512822" y="702" width="22" height="22" rx="4" fill="#D39B73" stroke="#94A3B8" stroke-width="1"/>
+<text x="1024.1" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">隙光</text>
+<rect x="1049.4615384615386" y="702" width="22" height="22" rx="4" fill="#1E293B"/>
+<text x="1060.5" y="740.0" font-size="11" font-weight="400" fill="#475569" text-anchor="middle">关</text>
+<text x="605.3" y="770.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">星光、涟漪、余晖、热度随按键：按下的键在灯带对应位置亮起。</text>
+<rect x="605.3" y="785.0" width="101.2" height="26" rx="6" fill="#F5F3FF" stroke="#7C3AED" stroke-opacity="0.45"/><text x="614.3" y="802.5" font-size="13" font-weight="600" fill="#5B21B6" text-anchor="start">Fn + ↑ / ↓</text>
+<text x="740.4" y="803.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">亮度 5 档（Fn + PgUp / PgDn 相同）</text>
+<rect x="605.3" y="821.0" width="101.2" height="26" rx="6" fill="#F5F3FF" stroke="#7C3AED" stroke-opacity="0.45"/><text x="614.3" y="838.5" font-size="13" font-weight="600" fill="#5B21B6" text-anchor="start">Fn + ← / →</text>
+<text x="740.4" y="839.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">动画速度 5 档（彩虹与星空、流星等环境灯效）</text>
+<rect x="605.3" y="857.0" width="79.4" height="26" rx="6" fill="#F5F3FF" stroke="#7C3AED" stroke-opacity="0.45"/><text x="614.3" y="874.5" font-size="13" font-weight="600" fill="#5B21B6" text-anchor="start">Fn + Del</text>
+<text x="740.4" y="875.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">音乐律动（再按换图案，Fn+Backspace 退出）</text>
+<rect x="605.3" y="893.0" width="79.4" height="26" rx="6" fill="#F5F3FF" stroke="#7C3AED" stroke-opacity="0.45"/><text x="614.3" y="910.5" font-size="13" font-weight="600" fill="#5B21B6" text-anchor="start">Fn + Ins</text>
+<text x="740.4" y="911.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">音乐律动灵敏度校准</text>
+<rect x="1122.6666666666667" y="554" width="517.3333333333334" height="391" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="1122.6666666666667" y="554" width="6" height="391" rx="3" fill="#EA580C"/>
 <text x="1146.7" y="590.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">番茄钟 · 打字速度</text>
 <rect x="1146.7" y="612.0" width="63.2" height="26" rx="6" fill="#FFF7ED" stroke="#EA580C" stroke-opacity="0.45"/><text x="1155.7" y="629.5" font-size="13" font-weight="600" fill="#9A3412" text-anchor="start">Fn + ;</text>
 <text x="1291.6" y="630.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">轻按：开始工作 / 跳到下一阶段</text>
@@ -341,99 +366,99 @@
 <rect x="1146.7" y="789.0" width="64.8" height="26" rx="6" fill="#FFF7ED" stroke="#EA580C" stroke-opacity="0.45"/><text x="1155.7" y="806.5" font-size="13" font-weight="600" fill="#9A3412" text-anchor="start">Fn + A</text>
 <text x="1291.6" y="807.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">WPM 打字速度条：中间向两端，绿→黄→红，100</text>
 <text x="1291.6" y="827.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">WPM 满格</text>
-<rect x="40.0" y="886" width="517.3333333333334" height="375" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
-<rect x="40.0" y="886" width="6" height="375" rx="3" fill="#475569"/>
-<text x="64.0" y="922.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">系统</text>
-<rect x="64.0" y="944.0" width="134.5" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="961.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + M 长按 3 秒</text>
-<text x="210.5" y="962.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">切换 Win / Mac</text>
-<text x="64.0" y="994.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">Mac 模式：Win 键 → Option，左右 Alt → Command</text>
-<rect x="64.0" y="1009.0" width="64.8" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1026.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + N</text>
-<text x="210.5" y="1027.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">全键无冲 开 / 关</text>
-<rect x="64.0" y="1045.0" width="134.5" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1062.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + D 长按 3 秒</text>
-<text x="210.5" y="1063.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">消抖 1 ms（低延迟）/ 8 ms（默认）</text>
-<rect x="64.0" y="1081.0" width="99.6" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1098.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + 右 Alt</text>
-<text x="210.5" y="1099.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">数字行 ⇄ F1–F12（Fn+数字变多媒体键）</text>
-<rect x="64.0" y="1117.0" width="79.4" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1134.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + Win</text>
-<text x="210.5" y="1135.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">锁定 Win 键</text>
-<rect x="64.0" y="1153.0" width="113.2" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1170.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + H J K L</text>
-<text x="210.5" y="1171.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">ScrLk · Pause · Home · End</text>
-<rect x="64.0" y="1189.0" width="64.8" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1206.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + I</text>
-<text x="210.5" y="1207.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">在当前窗口打出状态报告（先切英文输入法，按任意</text>
-<text x="210.5" y="1227.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">键中止）</text>
-<rect x="581.3333333333334" y="886" width="517.3333333333334" height="375" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
-<rect x="581.3333333333334" y="886" width="6" height="375" rx="3" fill="#16A34A"/>
-<text x="605.3" y="922.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">电池 · 休眠 · 模式</text>
-<rect x="605.3" y="944.0" width="64.8" height="26" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.45"/><text x="614.3" y="961.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">Fn + P</text>
-<text x="732.6" y="962.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">正常 → 省电 → 游戏 模式</text>
-<text x="605.3" y="994.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">省电：灯带只显示提醒，灯全黑时切断灯珠电源，最多 1 分钟休眠。游戏：消抖</text>
-<text x="605.3" y="1013.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">1 ms，禁用 Win 键。模式和 Win/Mac、灯带等设置按连接设备分别记住。</text>
-<rect x="605.3" y="1028.0" width="115.2" height="26" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.45"/><text x="614.3" y="1045.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">Fn + 空格 按住</text>
-<text x="732.6" y="1046.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">灯带分 10 段显示电量（无线模式）</text>
-<rect x="605.3" y="1064.0" width="106.9" height="26" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.45"/><text x="614.3" y="1081.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">Fn + 左 Ctrl</text>
-<text x="732.6" y="1082.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电池指示灯 开 / 关</text>
-<rect x="605.3333333333334" y="1103" width="14" height="14" rx="4" fill="#EAB308" stroke="#94A3B8" stroke-width="1"/>
-<text x="625.3" y="1115.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×2</text>
-<text x="713.3" y="1115.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电量 15–30%：每 30 秒黄闪 2 次</text>
-<rect x="605.3333333333334" y="1135" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
-<text x="625.3" y="1147.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×4</text>
-<text x="713.3" y="1147.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电量 &lt; 15%：每 15 秒红闪 4 次</text>
-<text x="605.3" y="1178.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">无线空闲 5 分钟休眠，按任意键唤醒；有线不休眠。休眠时间与提醒开关在 VIA</text>
-<text x="605.3" y="1197.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">里改。</text>
-<text x="605.3" y="1226.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">电量耗尽 25 秒后深度休眠，插线唤醒。</text>
-<rect x="1122.6666666666667" y="886" width="517.3333333333334" height="375" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
-<rect x="1122.6666666666667" y="886" width="6" height="375" rx="3" fill="#7C3AED"/>
-<text x="1146.7" y="922.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">灯带闪烁的含义</text>
-<rect x="1146.6666666666667" y="947" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
-<text x="1166.7" y="959.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×3</text>
-<text x="1254.7" y="959.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">亮度 / 速度已到头；律动校准</text>
-<rect x="1146.6666666666667" y="979" width="14" height="14" rx="4" fill="#3B82F6" stroke="#94A3B8" stroke-width="1"/>
-<text x="1168.7" y="991.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
-<rect x="1174.6666666666667" y="979" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
-<text x="1194.7" y="991.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×3</text>
-<text x="1254.7" y="991.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">切到 Win / 切到 Mac</text>
-<rect x="1146.6666666666667" y="1011" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
-<text x="1168.7" y="1023.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
-<rect x="1174.6666666666667" y="1011" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
-<text x="1194.7" y="1023.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×3</text>
-<text x="1254.7" y="1023.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">消抖 1 ms / 8 ms</text>
-<rect x="1146.6666666666667" y="1043" width="14" height="14" rx="4" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
-<text x="1168.7" y="1055.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
-<rect x="1174.6666666666667" y="1043" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
-<text x="1194.7" y="1055.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×3</text>
-<text x="1254.7" y="1055.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">全键无冲 开 / 关（整块键盘闪）</text>
-<rect x="1146.6666666666667" y="1075" width="14" height="14" rx="4" fill="#F05A3C" stroke="#94A3B8" stroke-width="1"/>
-<text x="1168.7" y="1087.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
-<rect x="1174.6666666666667" y="1075" width="14" height="14" rx="4" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
-<text x="1194.7" y="1087.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×1</text>
-<text x="1254.7" y="1087.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">开始工作 / 开始休息</text>
-<rect x="1146.6666666666667" y="1107" width="14" height="14" rx="4" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
-<text x="1168.7" y="1119.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
-<rect x="1174.6666666666667" y="1107" width="14" height="14" rx="4" fill="#F05A3C" stroke="#94A3B8" stroke-width="1"/>
-<text x="1194.7" y="1119.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×6</text>
-<text x="1254.7" y="1119.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">工作结束 / 休息结束</text>
-<rect x="1146.6666666666667" y="1139" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
-<text x="1166.7" y="1151.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×2</text>
-<text x="1254.7" y="1151.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">番茄钟已停止</text>
-<rect x="1146.6666666666667" y="1171" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
-<text x="1166.7" y="1183.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×1</text>
-<text x="1254.7" y="1183.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">WPM 速度条关闭</text>
-<rect x="1146.6666666666667" y="1203" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
-<text x="1168.7" y="1215.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
-<rect x="1174.6666666666667" y="1203" width="14" height="14" rx="4" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
-<text x="1196.7" y="1215.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
-<rect x="1202.6666666666667" y="1203" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
-<text x="1222.7" y="1215.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×2</text>
-<text x="1254.7" y="1215.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">切到 正常 / 省电 / 游戏 模式</text>
-<rect x="40" y="1285" width="1600" height="240" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
-<rect x="40" y="1285" width="6" height="240" rx="3" fill="#DC2626"/>
-<text x="64.0" y="1321.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">恢复 · 刷机 · VIA</text>
-<rect x="64.0" y="1343.0" width="149.0" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1360.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">Fn + Esc 长按 3 秒</text>
-<text x="228.2" y="1361.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">恢复出厂设置（整块键盘白闪 3 次）</text>
-<rect x="64.0" y="1379.0" width="152.2" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1396.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">Fn + 右Shift + Esc</text>
-<text x="228.2" y="1397.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">进入刷机模式</text>
-<rect x="64.0" y="1415.0" width="108.0" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1432.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">按住 Esc 插线</text>
-<text x="228.2" y="1433.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">清除设置并进入刷机模式（快捷键失效时的退路）</text>
-<text x="64.0" y="1465.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">VIA：加载 NUT65CU-via.json。Light bar 页：灯带模式 / 亮度 / 速度；Settings 页：休眠时间、插线切有线、低电量提醒、模式、每设备设置、番茄钟时长与进度显示、WPM 显示与满格值。</text>
-<text x="64.0" y="1494.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">电脑端工具 tools/cu_hid.py（USB 或 2.4G，蓝牙不支持）：状态、电池 / 休眠日志、按键热力图、每设备设置、模式。</text>
-<text x="1640.0" y="1551.0" font-size="12" font-weight="400" fill="#94A3B8" text-anchor="end">固件：github.com/Colorfulshadow/Nut65CU · 基于航晟 NUT65 开源 QMK</text>
+<rect x="40.0" y="969" width="517.3333333333334" height="375" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="40.0" y="969" width="6" height="375" rx="3" fill="#475569"/>
+<text x="64.0" y="1005.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">系统</text>
+<rect x="64.0" y="1027.0" width="134.5" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1044.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + M 长按 3 秒</text>
+<text x="210.5" y="1045.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">切换 Win / Mac</text>
+<text x="64.0" y="1077.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">Mac 模式：Win 键 → Option，左右 Alt → Command</text>
+<rect x="64.0" y="1092.0" width="64.8" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1109.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + N</text>
+<text x="210.5" y="1110.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">全键无冲 开 / 关</text>
+<rect x="64.0" y="1128.0" width="134.5" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1145.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + D 长按 3 秒</text>
+<text x="210.5" y="1146.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">消抖 1 ms（低延迟）/ 8 ms（默认）</text>
+<rect x="64.0" y="1164.0" width="99.6" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1181.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + 右 Alt</text>
+<text x="210.5" y="1182.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">数字行 ⇄ F1–F12（Fn+数字变多媒体键）</text>
+<rect x="64.0" y="1200.0" width="79.4" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1217.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + Win</text>
+<text x="210.5" y="1218.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">锁定 Win 键</text>
+<rect x="64.0" y="1236.0" width="113.2" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1253.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + H J K L</text>
+<text x="210.5" y="1254.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">ScrLk · Pause · Home · End</text>
+<rect x="64.0" y="1272.0" width="64.8" height="26" rx="6" fill="#F1F5F9" stroke="#475569" stroke-opacity="0.45"/><text x="73.0" y="1289.5" font-size="13" font-weight="600" fill="#1E293B" text-anchor="start">Fn + I</text>
+<text x="210.5" y="1290.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">在当前窗口打出状态报告（先切英文输入法，按任意</text>
+<text x="210.5" y="1310.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">键中止）</text>
+<rect x="581.3333333333334" y="969" width="517.3333333333334" height="375" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="581.3333333333334" y="969" width="6" height="375" rx="3" fill="#16A34A"/>
+<text x="605.3" y="1005.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">电池 · 休眠 · 模式</text>
+<rect x="605.3" y="1027.0" width="64.8" height="26" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.45"/><text x="614.3" y="1044.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">Fn + P</text>
+<text x="732.6" y="1045.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">正常 → 省电 → 游戏 模式</text>
+<text x="605.3" y="1077.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">省电：灯带只显示提醒，灯全黑时切断灯珠电源，最多 1 分钟休眠。游戏：消抖</text>
+<text x="605.3" y="1096.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">1 ms，禁用 Win 键。模式和 Win/Mac、灯带等设置按连接设备分别记住。</text>
+<rect x="605.3" y="1111.0" width="115.2" height="26" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.45"/><text x="614.3" y="1128.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">Fn + 空格 按住</text>
+<text x="732.6" y="1129.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">灯带分 10 段显示电量（无线模式）</text>
+<rect x="605.3" y="1147.0" width="106.9" height="26" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-opacity="0.45"/><text x="614.3" y="1164.5" font-size="13" font-weight="600" fill="#166534" text-anchor="start">Fn + 左 Ctrl</text>
+<text x="732.6" y="1165.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电池指示灯 开 / 关</text>
+<rect x="605.3333333333334" y="1186" width="14" height="14" rx="4" fill="#EAB308" stroke="#94A3B8" stroke-width="1"/>
+<text x="625.3" y="1198.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×2</text>
+<text x="713.3" y="1198.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电量 15–30%：每 30 秒黄闪 2 次</text>
+<rect x="605.3333333333334" y="1218" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
+<text x="625.3" y="1230.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×4</text>
+<text x="713.3" y="1230.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">电量 &lt; 15%：每 15 秒红闪 4 次</text>
+<text x="605.3" y="1261.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">无线空闲 5 分钟休眠，按任意键唤醒；有线不休眠。休眠时间与提醒开关在 VIA</text>
+<text x="605.3" y="1280.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">里改。</text>
+<text x="605.3" y="1309.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">电量耗尽 25 秒后深度休眠，插线唤醒。</text>
+<rect x="1122.6666666666667" y="969" width="517.3333333333334" height="375" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="1122.6666666666667" y="969" width="6" height="375" rx="3" fill="#7C3AED"/>
+<text x="1146.7" y="1005.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">灯带闪烁的含义</text>
+<rect x="1146.6666666666667" y="1030" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
+<text x="1166.7" y="1042.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×3</text>
+<text x="1254.7" y="1042.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">亮度 / 速度已到头；律动校准</text>
+<rect x="1146.6666666666667" y="1062" width="14" height="14" rx="4" fill="#3B82F6" stroke="#94A3B8" stroke-width="1"/>
+<text x="1168.7" y="1074.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
+<rect x="1174.6666666666667" y="1062" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
+<text x="1194.7" y="1074.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×3</text>
+<text x="1254.7" y="1074.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">切到 Win / 切到 Mac</text>
+<rect x="1146.6666666666667" y="1094" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
+<text x="1168.7" y="1106.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
+<rect x="1174.6666666666667" y="1094" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
+<text x="1194.7" y="1106.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×3</text>
+<text x="1254.7" y="1106.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">消抖 1 ms / 8 ms</text>
+<rect x="1146.6666666666667" y="1126" width="14" height="14" rx="4" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
+<text x="1168.7" y="1138.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
+<rect x="1174.6666666666667" y="1126" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
+<text x="1194.7" y="1138.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×3</text>
+<text x="1254.7" y="1138.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">全键无冲 开 / 关（整块键盘闪）</text>
+<rect x="1146.6666666666667" y="1158" width="14" height="14" rx="4" fill="#F05A3C" stroke="#94A3B8" stroke-width="1"/>
+<text x="1168.7" y="1170.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
+<rect x="1174.6666666666667" y="1158" width="14" height="14" rx="4" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
+<text x="1194.7" y="1170.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×1</text>
+<text x="1254.7" y="1170.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">开始工作 / 开始休息</text>
+<rect x="1146.6666666666667" y="1190" width="14" height="14" rx="4" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
+<text x="1168.7" y="1202.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
+<rect x="1174.6666666666667" y="1190" width="14" height="14" rx="4" fill="#F05A3C" stroke="#94A3B8" stroke-width="1"/>
+<text x="1194.7" y="1202.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×6</text>
+<text x="1254.7" y="1202.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">工作结束 / 休息结束</text>
+<rect x="1146.6666666666667" y="1222" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
+<text x="1166.7" y="1234.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×2</text>
+<text x="1254.7" y="1234.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">番茄钟已停止</text>
+<rect x="1146.6666666666667" y="1254" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
+<text x="1166.7" y="1266.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×1</text>
+<text x="1254.7" y="1266.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">WPM 速度条关闭</text>
+<rect x="1146.6666666666667" y="1286" width="14" height="14" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
+<text x="1168.7" y="1298.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
+<rect x="1174.6666666666667" y="1286" width="14" height="14" rx="4" fill="#22C55E" stroke="#94A3B8" stroke-width="1"/>
+<text x="1196.7" y="1298.0" font-size="13" font-weight="400" fill="#94A3B8" text-anchor="middle">/</text>
+<rect x="1202.6666666666667" y="1286" width="14" height="14" rx="4" fill="#EF4444" stroke="#94A3B8" stroke-width="1"/>
+<text x="1222.7" y="1298.0" font-size="13" font-weight="600" fill="#475569" text-anchor="start">×2</text>
+<text x="1254.7" y="1298.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">切到 正常 / 省电 / 游戏 模式</text>
+<rect x="40" y="1368" width="1600" height="240" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="40" y="1368" width="6" height="240" rx="3" fill="#DC2626"/>
+<text x="64.0" y="1404.0" font-size="19" font-weight="700" fill="#0F172A" text-anchor="start">恢复 · 刷机 · VIA</text>
+<rect x="64.0" y="1426.0" width="149.0" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1443.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">Fn + Esc 长按 3 秒</text>
+<text x="228.2" y="1444.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">恢复出厂设置（整块键盘白闪 3 次）</text>
+<rect x="64.0" y="1462.0" width="152.2" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1479.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">Fn + 右Shift + Esc</text>
+<text x="228.2" y="1480.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">进入刷机模式</text>
+<rect x="64.0" y="1498.0" width="108.0" height="26" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-opacity="0.45"/><text x="73.0" y="1515.5" font-size="13" font-weight="600" fill="#991B1B" text-anchor="start">按住 Esc 插线</text>
+<text x="228.2" y="1516.0" font-size="14" font-weight="400" fill="#334155" text-anchor="start">清除设置并进入刷机模式（快捷键失效时的退路）</text>
+<text x="64.0" y="1548.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">VIA：加载 NUT65CU-via.json。Light bar 页：灯带模式 / 亮度 / 速度；Settings 页：休眠时间、插线切有线、低电量提醒、模式、每设备设置、番茄钟时长与进度显示、WPM 显示与满格值。</text>
+<text x="64.0" y="1577.0" font-size="13" font-weight="400" fill="#64748B" text-anchor="start">电脑端工具 tools/cu_hid.py（USB 或 2.4G，蓝牙不支持）：状态、电池 / 休眠日志、按键热力图、每设备设置、模式。</text>
+<text x="1640.0" y="1634.0" font-size="12" font-weight="400" fill="#94A3B8" text-anchor="end">固件：github.com/Colorfulshadow/Nut65CU · 基于航晟 NUT65 开源 QMK</text>
 </svg>

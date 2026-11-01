@@ -169,3 +169,55 @@ index 90a75ed321..58ec830b84 100644
                  rgb_matrix_set_color(g_led_config.matrix_co[h][MATRIX_COLS - MID_COL], index_rgb.r, index_rgb.g, index_rgb.b);
              }
  
+diff --git a/quantum/via.c b/quantum/via.c
+index 643d7aa3c3..f54ecd8456 100644
+--- a/quantum/via.c
++++ b/quantum/via.c
+@@ -61,9 +61,9 @@
+ // EEPROM is invalid and use/save defaults.
+ bool via_eeprom_is_valid(void) {
+     char *  p      = QMK_BUILDDATE; // e.g. "2019-11-05-11:29:54"
+-    uint8_t magic0 = ((p[2] & 0x0F) << 4) | (p[3] & 0x0F);
+-    uint8_t magic1 = ((p[5] & 0x0F) << 4) | (p[6] & 0x0F);
+-    uint8_t magic2 = ((p[8] & 0x0F) << 4) | (p[9] & 0x0F);
++    uint8_t magic0 = VIA_EEPROM_MAGIC_BYTE(0, ((p[2] & 0x0F) << 4) | (p[3] & 0x0F));
++    uint8_t magic1 = VIA_EEPROM_MAGIC_BYTE(1, ((p[5] & 0x0F) << 4) | (p[6] & 0x0F));
++    uint8_t magic2 = VIA_EEPROM_MAGIC_BYTE(2, ((p[8] & 0x0F) << 4) | (p[9] & 0x0F));
+ 
+     return (eeprom_read_byte((void *)VIA_EEPROM_MAGIC_ADDR + 0) == magic0 && eeprom_read_byte((void *)VIA_EEPROM_MAGIC_ADDR + 1) == magic1 && eeprom_read_byte((void *)VIA_EEPROM_MAGIC_ADDR + 2) == magic2);
+ }
+@@ -72,9 +72,9 @@ bool via_eeprom_is_valid(void) {
+ // Keyboard level code (eg. via_init_kb()) should not call this
+ void via_eeprom_set_valid(bool valid) {
+     char *  p      = QMK_BUILDDATE; // e.g. "2019-11-05-11:29:54"
+-    uint8_t magic0 = ((p[2] & 0x0F) << 4) | (p[3] & 0x0F);
+-    uint8_t magic1 = ((p[5] & 0x0F) << 4) | (p[6] & 0x0F);
+-    uint8_t magic2 = ((p[8] & 0x0F) << 4) | (p[9] & 0x0F);
++    uint8_t magic0 = VIA_EEPROM_MAGIC_BYTE(0, ((p[2] & 0x0F) << 4) | (p[3] & 0x0F));
++    uint8_t magic1 = VIA_EEPROM_MAGIC_BYTE(1, ((p[5] & 0x0F) << 4) | (p[6] & 0x0F));
++    uint8_t magic2 = VIA_EEPROM_MAGIC_BYTE(2, ((p[8] & 0x0F) << 4) | (p[9] & 0x0F));
+ 
+     eeprom_update_byte((void *)VIA_EEPROM_MAGIC_ADDR + 0, valid ? magic0 : 0xFF);
+     eeprom_update_byte((void *)VIA_EEPROM_MAGIC_ADDR + 1, valid ? magic1 : 0xFF);
+diff --git a/quantum/via.h b/quantum/via.h
+index 01d4c48b37..5a8498af80 100644
+--- a/quantum/via.h
++++ b/quantum/via.h
+@@ -29,6 +29,17 @@
+ #    define VIA_EEPROM_MAGIC_ADDR (EECONFIG_SIZE)
+ #endif
+ 
++// A keyboard can fix the magic instead, three bytes in its config.h, e.g.
++//   #define VIA_EEPROM_MAGIC_FIXED 0xC5, 0x43, 0x01
++// so that firmware built on another day keeps the keymaps and macros; it then has to
++// change the bytes itself when that EEPROM usage changes. (Done here rather than in
++// via.c: keyboards/linker/wireless/md_raw.h finds via.c's raw_hid_send by line number.)
++#ifdef VIA_EEPROM_MAGIC_FIXED
++#    define VIA_EEPROM_MAGIC_BYTE(i, date) ((void)(date), ((const uint8_t[3]){VIA_EEPROM_MAGIC_FIXED})[i])
++#else
++#    define VIA_EEPROM_MAGIC_BYTE(i, date) (date)
++#endif
++
+ #define VIA_EEPROM_LAYOUT_OPTIONS_ADDR (VIA_EEPROM_MAGIC_ADDR + 3)
+ 
+ // Changing the layout options size after release will invalidate EEPROM,
