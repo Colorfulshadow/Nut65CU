@@ -17,6 +17,7 @@
 #include "cu_mode.h"
 #include "cu_debounce.h"
 #include "cu_overlay.h"
+#include "cu_stage.h"
 
 // nut65cu.c / wls.c
 extern bool     charging_state;
@@ -232,6 +233,9 @@ static cu_hid_status_t handle(uint8_t sub, const uint8_t *arg, uint8_t *p) {
 #endif
         case CU_HID_LIGHT_CLEAR:
             cu_overlay_clear();
+            return CU_HID_OK;
+        case CU_HID_STAGE:
+            cu_stage_command(arg,p);
             return CU_HID_OK;
         case CU_HID_BOOT_REQUEST:
             if (get32(arg) != CU_HID_BOOT_MAGIC) return CU_HID_BAD_ARGUMENT;

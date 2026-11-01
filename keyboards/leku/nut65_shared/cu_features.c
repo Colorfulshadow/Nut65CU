@@ -28,6 +28,7 @@
 #include "cu_keys.h"
 #include "cu_profile.h"
 #include "cu_debounce.h"
+#include "cu_stage.h"
 #include "cu_host.h"
 #include "cu_mode.h"
 #include "cu_overlay.h"
@@ -406,6 +407,7 @@ void cu_features_init(void) {
     static bool store_started;
     if (!store_started) {
         store_started = true;
+        cu_stage_init();
         cu_store_init();
         cu_log_init();
         cu_keys_init();
@@ -427,6 +429,7 @@ void cu_features_task(void) {
     cu_keys_task();
     cu_profile_task();
     cu_host_task();
+    cu_stage_task();
     cu_mode_task();
 }
 
@@ -529,7 +532,7 @@ void cu_bar_fx_set(uint8_t fx) {
 
 bool cu_prevent_sleep(void) {
     // The MCU clock stops while asleep, so sleeping would freeze the timer.
-    return pomo_phase != POMO_IDLE;
+    return pomo_phase != POMO_IDLE || cu_stage_awake();
 }
 
 bool cu_via_get_value(uint8_t value_id, uint8_t *value_data) {

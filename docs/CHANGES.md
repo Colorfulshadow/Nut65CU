@@ -129,3 +129,8 @@ CU 与普通版使用同一套主控和引脚（矩阵、LED 电源 A8、升压 
 - 新模式存在本固件设置原来的保留字节里，原厂 EEPROM 布局不变；升级后原来的模式保持不变。
 - **协议 5**：INFO 的灯带字节 bit7 = 模式号 bit4；VIA 菜单与每设备设置的灯带模式取值 0–24（`NUT65CU-via.json` 已更新）。
 - 文件头署名：本项目写的文件署 Colorfulshadow；在原厂代码上改动的文件保留原版权行并加一行；`keyboard.json` 的 maintainer 改为 Colorfulshadow。
+
+## p14 接收实验（2026-11-01，协议7，CU受控USB/2.4G接收已验证）
+
+新增cu_stage：镜像分包接收、页CRC/读回、journal断点进度、SHA-256校验；没有安装命令。当前应用128 KiB链接限制，内部后半区120 KiB镜像+8 KiB元数据；不改变EEPROM或外置日志/计数分区。
+修复无线模组发送重试计数被反复清零的问题，DIAG尾部增加重试/丢弃/队列满计数；仍共用FIFO，未确认半分钟慢根因。实验状态见firmware/p14/CHANGES.md。

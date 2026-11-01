@@ -30,7 +30,7 @@
 #include "action.h"
 
 #define CU_HID_CMD      0xC5 // not a VIA command id
-#define CU_HID_PROTOCOL 6    // 4: INFO page 1 (model), KEY_LIGHT; 5: light bar modes 13-24 (INFO p[27] bit 7 = mode bit 4)
+#define CU_HID_PROTOCOL 7    // 5: bar effects; 6: debounce; 7: stage-only image receiver (no installer)
 
 typedef enum {
     CU_HID_OK = 0,
@@ -69,6 +69,7 @@ enum cu_hid_command {
                                   // The bar blinks amber, the next key press decides: Esc (matrix 0,0)
                                   // enters the bootloader, any other key cancels; event BOOT tells which
     CU_HID_BOOT_CANCEL    = 0x61, // withdraw a pending BOOT_REQUEST (OK even if none is pending)
+    CU_HID_STAGE          = 0x70, // stage-only image transfer; never installs
     CU_HID_EVENT          = 0x80, // keyboard -> host only
 };
 

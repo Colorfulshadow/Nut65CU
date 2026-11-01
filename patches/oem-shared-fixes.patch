@@ -34,10 +34,27 @@ index eebfc94d9f..d478a3fc3c 100644
  
  #endif
 diff --git a/keyboards/linker/wireless/module.c b/keyboards/linker/wireless/module.c
-index 7ae8af094a..abb7f74bc7 100644
+index 7ae8af094a..9ccf972c83 100644
 --- a/keyboards/linker/wireless/module.c
 +++ b/keyboards/linker/wireless/module.c
-@@ -118,6 +118,8 @@ void md_receive_raw_cb(uint8_t *pdata, uint8_t len) {}
+@@ -1,4 +1,5 @@
+ // Copyright 2024 Su (@isuua)
++// Copyright 2026 Colorfulshadow (@Colorfulshadow)
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
+ #include "quantum.h"
+@@ -76,6 +77,10 @@ static md_info_t md_info = {
+     .state     = MD_STATE_NONE,
+ };
+ 
++static void md_queue(uint8_t *data, uint32_t size) {
++    if (!smsg_push(data,size)) md_diag.queue_full++;
++}
++
+ static void md_send_ack(void) {
+ 
+     uint8_t sdata[0x03] = {0x61, 0x0D, 0x0A};
+@@ -118,6 +123,8 @@ void md_receive_raw_cb(uint8_t *pdata, uint8_t len) {}
  void md_receive_host_cb(bool resume) __attribute__((weak));
  void md_receive_host_cb(bool resume) {}
  
@@ -46,7 +63,7 @@ index 7ae8af094a..abb7f74bc7 100644
  static void md_receive_msg_task(void) {
      static uint32_t data_count = 0x00;
      static uint8_t data_remain = 0x00;
-@@ -139,6 +141,8 @@ static void md_receive_msg_task(void) {
+@@ -139,6 +146,8 @@ static void md_receive_msg_task(void) {
                          data_remain                  = 2;
                      } break;
                      default: {
@@ -55,7 +72,7 @@ index 7ae8af094a..abb7f74bc7 100644
                          data_count = 0;
                      } break;
                  }
-@@ -161,12 +165,20 @@ static void md_receive_msg_task(void) {
+@@ -161,12 +170,20 @@ static void md_receive_msg_task(void) {
  
                  // raw data
                  if ((md_rev_payload[0] == MD_REV_CMD_RAW) && (md_rev_payload[1] == MD_REV_CMD_RAW_OUT)) {
@@ -76,7 +93,7 @@ index 7ae8af094a..abb7f74bc7 100644
                  md_rev_payload[data_count++] = data;
                  data_remain--;
  
-@@ -176,8 +188,15 @@ static void md_receive_msg_task(void) {
+@@ -176,8 +193,15 @@ static void md_receive_msg_task(void) {
              } break;
          }
  
@@ -92,7 +109,7 @@ index 7ae8af094a..abb7f74bc7 100644
  
              if (md_receive_process_kb(md_rev_payload, data_count) != true) {
                  return;
-@@ -190,10 +209,15 @@ static void md_receive_msg_task(void) {
+@@ -190,10 +214,15 @@ static void md_receive_msg_task(void) {
  
                      len   = md_rev_payload[2];
                      pdata = &md_rev_payload[3];
@@ -110,7 +127,154 @@ index 7ae8af094a..abb7f74bc7 100644
                      }
                  } break;
                  case MD_REV_CMD_INDICATOR: {
-@@ -466,6 +490,7 @@ void md_send_raw(uint8_t *data, uint8_t length) {
+@@ -241,7 +270,6 @@ static void md_send_pkt_task(void) {
+     switch (smsg_get_state()) {
+         case smsg_state_busy: {
+             if (sync_timer_elapsed32(smsg_timer) > (MD_SNED_PKT_TIMEOUT)) {
+-                smsg_retry = 0;
+                 smsg_set_state(smsg_state_retry);
+             }
+         } break;
+@@ -249,10 +277,14 @@ static void md_send_pkt_task(void) {
+             if (++smsg_retry > MD_SEND_PKT_RETRY) {
+                 smsg_retry = 0;
+                 smsg_pop();
++                md_diag.tx_dropped++;
++            } else {
++                md_diag.tx_retries++;
+             }
+             smsg_set_state(smsg_state_free);
+         } break;
+         case smsg_state_replied: {
++            smsg_retry = 0;
+             smsg_pop();
+             smsg_set_state(smsg_state_free);
+         } // break;
+@@ -319,7 +351,7 @@ void md_send_kb(uint8_t *data) {
+     sdata[0] = MD_SND_CMD_SEND_KB;
+     memcpy(&sdata[1], data, sizeof(sdata) - 2);
+     md_calc_check_sum(sdata, sizeof(sdata) - 1);
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_send_nkro(uint8_t *data) {
+@@ -328,7 +360,7 @@ void md_send_nkro(uint8_t *data) {
+     sdata[0] = MD_SND_CMD_SEND_NKRO;
+     memcpy(&sdata[1], data, sizeof(sdata) - 2);
+     md_calc_check_sum(sdata, sizeof(sdata) - 1);
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_send_consumer(uint8_t *data) {
+@@ -337,7 +369,7 @@ void md_send_consumer(uint8_t *data) {
+     sdata[0] = MD_SND_CMD_SEND_CONSUMER;
+     memcpy(&sdata[1], data, sizeof(sdata) - 2);
+     md_calc_check_sum(sdata, sizeof(sdata) - 1);
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_send_system(uint8_t *data) {
+@@ -346,7 +378,7 @@ void md_send_system(uint8_t *data) {
+     sdata[0] = MD_SND_CMD_SEND_SYSTEM;
+     memcpy(&sdata[1], data, sizeof(sdata) - 2);
+     md_calc_check_sum(sdata, sizeof(sdata) - 1);
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_send_fn(uint8_t *data) {
+@@ -355,7 +387,7 @@ void md_send_fn(uint8_t *data) {
+     sdata[0] = MD_SND_CMD_SEND_FN;
+     memcpy(&sdata[1], data, sizeof(sdata) - 2);
+     md_calc_check_sum(sdata, sizeof(sdata) - 1);
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_send_mouse(uint8_t *data) {
+@@ -364,7 +396,7 @@ void md_send_mouse(uint8_t *data) {
+     sdata[0] = MD_SND_CMD_SEND_MOUSE;
+     memcpy(&sdata[1], data, sizeof(sdata) - 2);
+     md_calc_check_sum(sdata, sizeof(sdata) - 1);
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_send_devinfo(const char *name) {
+@@ -380,7 +412,7 @@ void md_send_devinfo(const char *name) {
+ 
+     memcpy(&sdata[2], name, infolen);
+     md_calc_check_sum(sdata, infolen + 2);
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_send_devctrl(uint8_t cmd) {
+@@ -389,7 +421,7 @@ void md_send_devctrl(uint8_t cmd) {
+     sdata[0] = MD_SND_CMD_DEVCTRL;
+     memcpy(&sdata[1], &cmd, sizeof(sdata) - 2);
+     md_calc_check_sum(sdata, sizeof(sdata) - 1);
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_send_devctrl_bat(uint8_t cmd) {
+@@ -398,7 +430,7 @@ void md_send_devctrl_bat(uint8_t cmd) {
+     sdata[0] = MD_SND_CMD_DEVCTRL_BAT;
+     memcpy(&sdata[1], &cmd, sizeof(sdata) - 2);
+     md_calc_check_sum(sdata, sizeof(sdata) - 1);
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_rf_send_carrier(uint8_t channel, uint8_t tx_power, uint8_t phy) {
+@@ -410,13 +442,13 @@ void md_rf_send_carrier(uint8_t channel, uint8_t tx_power, uint8_t phy) {
+     sdata[3] = phy;
+     // md_calc_check_sum(sdata, sizeof(sdata) - 1);
+     sdata[4] = sdata[0] + sdata[1] - sdata[3];
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_rf_send_stop(void) {
+     uint8_t sdata[3] = {0xB4, 0x00, 0xB4};
+ 
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_send_manufacturer(char *str, uint8_t len) {
+@@ -430,7 +462,7 @@ void md_send_manufacturer(char *str, uint8_t len) {
+     sdata[1] = len;
+     memcpy(&sdata[2], str, len);
+     md_calc_check_sum(sdata, len + 2);
+-    smsg_push(sdata, len + 3);
++    md_queue(sdata, len + 3);
+ }
+ 
+ void md_send_product(char *str, uint8_t len) {
+@@ -444,7 +476,7 @@ void md_send_product(char *str, uint8_t len) {
+     sdata[1] = len;
+     memcpy(&sdata[2], str, len);
+     md_calc_check_sum(sdata, len + 2);
+-    smsg_push(sdata, len + 3);
++    md_queue(sdata, len + 3);
+ }
+ 
+ void md_send_vpid(uint16_t vid, uint16_t pid) {
+@@ -456,7 +488,7 @@ void md_send_vpid(uint16_t vid, uint16_t pid) {
+     sdata[0] = MD_SND_CMD_VPID;
+     memcpy(&sdata[1], &vpid, sizeof(vpid));
+     md_calc_check_sum(sdata, sizeof(sdata) - 1);
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_send_raw(uint8_t *data, uint8_t length) {
+@@ -466,12 +498,13 @@ void md_send_raw(uint8_t *data, uint8_t length) {
          return;
      }
  
@@ -118,11 +282,24 @@ index 7ae8af094a..abb7f74bc7 100644
      sdata[0] = MD_SND_CMD_RAW;
      sdata[1] = MD_SND_CMD_RAW_IN;
      sdata[2] = length;
+     memcpy(&sdata[3], data, length);
+     md_calc_check_sum(sdata, sizeof(sdata) - 1);
+-    smsg_push(sdata, sizeof(sdata));
++    md_queue(sdata, sizeof(sdata));
+ }
+ 
+ void md_devs_change(uint8_t devs, bool reset) __attribute__((weak));
 diff --git a/keyboards/linker/wireless/module.h b/keyboards/linker/wireless/module.h
-index 854bab1fca..ee28fcce4d 100644
+index 854bab1fca..bc6765b8be 100644
 --- a/keyboards/linker/wireless/module.h
 +++ b/keyboards/linker/wireless/module.h
-@@ -132,3 +132,16 @@ uint8_t *md_getp_indicator(void);
+@@ -1,4 +1,5 @@
+ // Copyright 2024 Su (@isuua)
++// Copyright 2026 Colorfulshadow (@Colorfulshadow)
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
+ #pragma once
+@@ -132,3 +133,19 @@ uint8_t *md_getp_indicator(void);
  void md_rf_send_carrier(uint8_t channel, uint8_t tx_power, uint8_t phy);
  void md_rf_send_stop(void);
  void md_send_devctrl_bat(uint8_t cmd);
@@ -137,6 +314,9 @@ index 854bab1fca..ee28fcce4d 100644
 +    uint8_t  unknown_last;
 +    uint8_t  raw_len;    // length byte of the last raw packet
 +    uint8_t  last[4][2]; // command, first byte of the last frames other than battery level
++    uint16_t tx_retries; // protocol 7: UART retries, wraps at 65536
++    uint16_t tx_dropped; // packets dropped after the retry budget
++    uint16_t queue_full; // enqueue rejected; not a radio loss counter
 +} md_diag_t;
 +extern md_diag_t md_diag;
 diff --git a/quantum/rgb_matrix/animations/pixel_fractal_anim.h b/quantum/rgb_matrix/animations/pixel_fractal_anim.h
