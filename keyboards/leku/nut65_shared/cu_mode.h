@@ -5,10 +5,11 @@
 // part of the per-device settings, so e.g. the gaming PC can stay in game mode while a
 // laptop on Bluetooth saves power.
 //
-//   power save: light bar animations hidden (alerts still flash), LED power and the LED
-//               boost converter cut while every LED is dark, sleep after at most 1 min,
-//               the MCU idles between matrix scans once you stop typing
-//   game:       1 ms debounce, Win key disabled (Win mode only), Win LED red
+//   power save: native key/bar animations hidden (status and host lights still work),
+//               LED/boost power cut after 500 ms black, sleep after at most 1 min;
+//               on battery wireless, WFI waits 4 ms active / 8 ms idle, with UART and
+//               staging bypasses; one battery query/charge heartbeat every 15 s
+//   game:       separately configured debounce, Win key disabled (Win mode only), Win LED red
 
 #pragma once
 
@@ -27,6 +28,9 @@ void      cu_mode_init(uint8_t saved);
 cu_mode_t cu_mode_get(void);
 void      cu_mode_set(cu_mode_t mode); // applies, logs and remembers it
 void      cu_mode_task(void);
+void      cu_mode_matrix_changed(void);                  // raw edge, before debounce
+void      cu_mode_power_task(uint8_t status);            // sampled cable/charge command
+void      cu_mode_clear_key_lights(void);                // before status/host indicators
 bool      cu_mode_process_record(uint16_t keycode, keyrecord_t *record); // false: key swallowed
 bool      cu_mode_bar_dark(void);                       // hide the light bar's own animations
 uint16_t  cu_mode_debounce(void);                       // ms, for hs_debounce.c

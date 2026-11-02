@@ -12,6 +12,7 @@
 #include "timer.h"
 
 uint16_t cu_mode_debounce(void); // cu_mode.c: hs_deb, or 1 ms in game mode
+void cu_mode_matrix_changed(void);
 
 static bool         debouncing = false;
 static fast_timer_t debouncing_time;
@@ -22,6 +23,7 @@ bool debounce(matrix_row_t raw[], matrix_row_t cooked[], uint8_t num_rows, bool 
     bool cooked_changed = false;
 
     if (changed) {
+        cu_mode_matrix_changed();
         debouncing      = true;
         debouncing_time = timer_read_fast();
     } else if (debouncing && timer_elapsed_fast(debouncing_time) >= cu_mode_debounce()) {

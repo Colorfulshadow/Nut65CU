@@ -1563,7 +1563,6 @@ void hs_matrix_loop(void) {
 
 void housekeeping_task_user(void) { // loop
     uint8_t hs_now_mode;
-    static uint32_t hs_current_time;
     
     charging_state = readPin(HS_BAT_CABLE_PIN);
 
@@ -1578,11 +1577,7 @@ void housekeeping_task_user(void) { // loop
         hs_now_mode = MD_SND_CMD_DEVCTRL_CHARGING_STOP;
     }
 
-    if (!hs_current_time || timer_elapsed32(hs_current_time) > 1000) {
-        hs_current_time = timer_read32();
-        md_send_devctrl(hs_now_mode);
-        md_send_devctrl(MD_SND_CMD_DEVCTRL_INQVOL);
-    }
+    cu_mode_power_task(hs_now_mode);
 
     hs_matrix_loop();
 
@@ -1656,6 +1651,7 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
             rgb_matrix_set_color(space_mirror[i], rgb_matrix_ws2812_array[12].r, rgb_matrix_ws2812_array[12].g,
                                  rgb_matrix_ws2812_array[12].b);
         }
+        cu_mode_clear_key_lights(); // ECO hides native RGB; status/host lights below remain available
 #endif
 
         if (ee_clr_timer && timer_elapsed32(ee_clr_timer) > 3000) {

@@ -319,6 +319,47 @@ index 854bab1fca..bc6765b8be 100644
 +    uint16_t queue_full; // enqueue rejected; not a radio loss counter
 +} md_diag_t;
 +extern md_diag_t md_diag;
+diff --git a/keyboards/linker/wireless/wireless.c b/keyboards/linker/wireless/wireless.c
+index 0a52cbb35e..63d488b950 100644
+--- a/keyboards/linker/wireless/wireless.c
++++ b/keyboards/linker/wireless/wireless.c
+@@ -277,6 +277,11 @@ void wireless_pre_task(void) {}
+ void wireless_post_task(void) __attribute__((weak));
+ void wireless_post_task(void) {}
+ 
++bool wireless_battery_poll_enabled(void) __attribute__((weak));
++bool wireless_battery_poll_enabled(void) {
++    return true;
++}
++
+ void wireless_task(void) {
+ 
+     wireless_pre_task();
+@@ -292,7 +297,7 @@ void wireless_task(void) {
+     } else if (lpwr_get_state() == LPWR_NORMAL) {
+         static uint32_t inqtimer = 0x00;
+ 
+-        if (sync_timer_elapsed32(inqtimer) >= (WLS_INQUIRY_BAT_TIME)) {
++        if (wireless_battery_poll_enabled() && sync_timer_elapsed32(inqtimer) >= (WLS_INQUIRY_BAT_TIME)) {
+             if (md_inquire_bat()) {
+                 inqtimer = sync_timer_read32();
+             }
+@@ -303,4 +308,4 @@ void wireless_task(void) {
+ void housekeeping_task_kb(void) {
+     if (wireless_get_current_devs() == DEVS_USB && im_test_rate_flag) usb_mode_test_report_task();
+     wireless_task();
+-}
+\ No newline at end of file
++}
+diff --git a/keyboards/linker/wireless/wireless.h b/keyboards/linker/wireless/wireless.h
+index 606b6f8087..9ade778e6e 100644
+--- a/keyboards/linker/wireless/wireless.h
++++ b/keyboards/linker/wireless/wireless.h
+@@ -14,3 +14,4 @@ uint8_t wireless_get_current_devs(void);
+ void wireless_pre_task(void);
+ void wireless_post_task(void);
+ void wireless_task(void);
++bool wireless_battery_poll_enabled(void); // weak default true; board may own its battery schedule
 diff --git a/quantum/rgb_matrix/animations/pixel_fractal_anim.h b/quantum/rgb_matrix/animations/pixel_fractal_anim.h
 index 90a75ed321..58ec830b84 100644
 --- a/quantum/rgb_matrix/animations/pixel_fractal_anim.h
