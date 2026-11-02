@@ -1,0 +1,2 @@
+79a4c012c3b5deff3c2f64d31d142d155b9eb26eab1b9a308cab9e61411a287a  leku_nut65cu_default.bin
+b31a90d349e5e18851cadd117609b6cba96309f10085d0c006d34740f79cabb1  leku_nut65rgb_default.bin

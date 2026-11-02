@@ -3,11 +3,8 @@
 //
 // Normal / power save / game mode.
 //
-// Why power save cuts LED power: the LEDs (88 on CU / 151 on NUT65) and the boost
-// converter feeding the bar draw current even when every LED is black, and the board
-// only cut that power for sleep. Here it is cut once the whole frame has been black for
-// a moment and switched back on as soon as anything lights (the frame is redrawn every
-// few ms, so the LEDs catch up straight away).
+// ECO always cuts both LED rails, including indicators and music.
+// RGB settings stay intact; the task/flush hook suppresses all LED traffic.
 
 #include QMK_KEYBOARD_H
 #include "cu_mode.h"
@@ -18,37 +15,32 @@
 #include "cu_stage.h"
 #include "wireless.h"
 
-extern rgb_led_t rgb_matrix_ws2812_array[];  // rgb_matrix_drivers.c
 extern uint16_t  hs_deb;                     // nut65cu.c: debounce from DEB_TOG
 extern bool      hs_os_is_mac(void);         // nut65cu.c
-extern bool      hs_music_active(void);      // nut65cu.c: the music chip drives the bar
+extern void      hs_music_power(bool on);    // transient music routing, not settings
 extern bool      charging_state;             // cable present, sampled before cu_mode_task
 
 #define ECO_SLEEP_MAX_MS    60000
-#define ECO_DARK_MS         500  // all LEDs black this long: cut their power
 #define ECO_IDLE_AFTER_MS   1000
 #define ECO_ACTIVE_WAIT_MS  4    // CPU WFI between scans; not the radio/USB polling rate
 #define ECO_IDLE_WAIT_MS    8
 #define ECO_BATTERY_MS      15000
 
 static cu_mode_t mode = CU_MODE_NORMAL;
-static bool      led_power = true;
-static uint32_t  dark_since;
 static uint32_t  matrix_changed_at;
 static bool      power_polled;
 static uint32_t  power_polled_at;
 static uint8_t   power_status, power_device;
 
 static void led_power_set(bool on) {
-    if (on == led_power) return;
-    led_power = on;
     gpio_write_pin(LED_POWER_EN_PIN, on);
     gpio_write_pin(HS_LED_BOOSTING_PIN, on);
+    hs_music_power(on);
 }
 
 void cu_mode_init(uint8_t saved) {
     mode = saved < CU_MODE_COUNT ? saved : CU_MODE_NORMAL;
-    dark_since = 0;
+    led_power_set(mode != CU_MODE_ECO);
     matrix_changed_at = timer_read32();
     power_polled = false;
 }
@@ -60,10 +52,9 @@ cu_mode_t cu_mode_get(void) {
 void cu_mode_set(cu_mode_t m) {
     if (m >= CU_MODE_COUNT || m == mode) return;
     mode = m;
-    dark_since = 0;
+    led_power_set(mode != CU_MODE_ECO);
     power_polled = false;
     matrix_changed_at = timer_read32();
-    if (mode != CU_MODE_ECO) led_power_set(true);
     cu_profile_save_mode(mode);
     cu_log_event(CU_LOG_MODE, mode);
 }
@@ -138,30 +129,18 @@ uint32_t cu_mode_sleep_timeout(uint32_t timeout) {
     return timeout;
 }
 
+bool rgb_matrix_power_enabled(void) {
+    return mode != CU_MODE_ECO;
+}
+
 void cu_mode_indicators(void) {
     if (mode == CU_MODE_GAME && !hs_os_is_mac()) {
         rgb_matrix_set_color(HS_RGB_INDEX_WIN_LOCK, 0xFF, 0x00, 0x00);
     }
-
-    if (mode != CU_MODE_ECO || hs_music_active()) {
-        led_power_set(true);
-        return;
-    }
-    for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
-        rgb_led_t *l = &rgb_matrix_ws2812_array[i];
-        if (l->r | l->g | l->b) {
-            dark_since = 0;
-            led_power_set(true);
-            return;
-        }
-    }
-    if (!dark_since) dark_since = cu_timer_start();
-    if (timer_elapsed32(dark_since) >= ECO_DARK_MS) led_power_set(false);
 }
 
 void cu_mode_after_wake(void) {
-    led_power  = true; // waking turned the LED power back on
-    dark_since = 0;
+    led_power_set(mode != CU_MODE_ECO);
     matrix_changed_at = timer_read32();
-    power_polled = false; // query fresh battery/charge state as soon as NORMAL resumes
+    power_polled = false;
 }

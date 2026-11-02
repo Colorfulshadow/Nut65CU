@@ -396,8 +396,8 @@ void keyboard_post_init_kb(void) {
     cu_features_init();
 
 #ifdef LED_POWER_EN_PIN
+    gpio_write_pin(LED_POWER_EN_PIN, cu_mode_get() != CU_MODE_ECO);
     gpio_set_pin_output(LED_POWER_EN_PIN);
-    gpio_write_pin_high(LED_POWER_EN_PIN);
 
 #endif
 
@@ -431,8 +431,8 @@ void keyboard_post_init_kb(void) {
 #endif
 
 #ifdef HS_LED_BOOSTING_PIN
+    gpio_write_pin(HS_LED_BOOSTING_PIN, cu_mode_get() != CU_MODE_ECO);
     gpio_set_pin_output(HS_LED_BOOSTING_PIN);
-    gpio_write_pin_high(HS_LED_BOOSTING_PIN);
 #endif
 
 #ifdef WIRELESS_ENABLE
@@ -471,7 +471,7 @@ void keyboard_post_init_kb(void) {
     gpio_write_pin_low(HS_MUSIC_MODE_PIN);
 
     gpio_set_pin_output(HS_MUSIC_CUT_PIN);
-    if (confinfo.hs_music_cut) {
+    if (confinfo.hs_music_cut && cu_mode_get() != CU_MODE_ECO) {
         gpio_write_pin_high(HS_MUSIC_CUT_PIN);
         music_cut_flag = false;
     } else {
@@ -530,18 +530,18 @@ void suspend_power_down_kb(void) {
 void suspend_wakeup_init_kb(void) {
 
 #    ifdef LED_POWER_EN_PIN
-    gpio_write_pin_high(LED_POWER_EN_PIN);
+    gpio_write_pin(LED_POWER_EN_PIN, cu_mode_get() != CU_MODE_ECO);
 #    endif
 
 #ifdef HS_LED_BOOSTING_PIN
-    gpio_write_pin_high(HS_LED_BOOSTING_PIN);
+    gpio_write_pin(HS_LED_BOOSTING_PIN, cu_mode_get() != CU_MODE_ECO);
 #endif
 
     gpio_set_pin_output(HS_MUSIC_MODE_PIN);
     gpio_write_pin_low(HS_MUSIC_MODE_PIN);
 
     gpio_set_pin_output(HS_MUSIC_CUT_PIN);
-    if (confinfo.hs_music_cut) {
+    if (confinfo.hs_music_cut && cu_mode_get() != CU_MODE_ECO) {
         gpio_write_pin_high(HS_MUSIC_CUT_PIN);
         music_cut_flag = false;
     } else {
@@ -550,7 +550,7 @@ void suspend_wakeup_init_kb(void) {
     }
 
     wireless_devs_change(wireless_get_current_devs(), wireless_get_current_devs(), false);
-    cu_mode_after_wake(); // LED power is back on
+    cu_mode_after_wake(); // restore the selected mode, including ECO rails off
     // A sleep request raised while the board was already going to sleep would
     // otherwise still be pending and send it straight back to sleep after this wake.
     lpwr_set_timeout_manual(false);
@@ -1104,7 +1104,8 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             } 
             return false;
         } break;
-        case MUS_CUT:{ 
+        case MUS_CUT:{
+            if (cu_mode_get() == CU_MODE_ECO) return false;
             static bool hs_once_fg = false;
             if (record->event.pressed && !hs_once_fg) { 
                 confinfo.hs_music_cut = true;
@@ -1125,7 +1126,8 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         }break;
-        case MUS_STA: { 
+        case MUS_STA: {
+            if (cu_mode_get() == CU_MODE_ECO) return false;
             static bool hs_once_flag = false;
             if (record->event.pressed && !hs_once_flag) {
                 gpio_write_pin_high(HS_MUSIC_MODE_PIN); 
@@ -1577,6 +1579,16 @@ void housekeeping_task_user(void) { // loop
         hs_now_mode = MD_SND_CMD_DEVCTRL_CHARGING_STOP;
     }
 
+    if (ee_clr_timer && timer_elapsed32(ee_clr_timer) > 3000) {
+        hs_reset_settings();
+        ee_clr_timer = 0;
+    }
+
+    if (hs_freq_timer && timer_elapsed32(hs_freq_timer) > 10000) {
+        hs_frequency_test = !hs_frequency_test;
+        hs_freq_timer = 0;
+    }
+
     cu_mode_power_task(hs_now_mode);
 
     hs_matrix_loop();
@@ -1651,18 +1663,8 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
             rgb_matrix_set_color(space_mirror[i], rgb_matrix_ws2812_array[12].r, rgb_matrix_ws2812_array[12].g,
                                  rgb_matrix_ws2812_array[12].b);
         }
-        cu_mode_clear_key_lights(); // ECO hides native RGB; status/host lights below remain available
+        cu_mode_clear_key_lights(); // transient RGB suppression; ECO task itself is paused
 #endif
-
-        if (ee_clr_timer && timer_elapsed32(ee_clr_timer) > 3000) {
-            hs_reset_settings();
-            ee_clr_timer = 0;
-        }
-
-        if (hs_freq_timer && timer_elapsed32(hs_freq_timer) > 10000) {
-            hs_frequency_test = !hs_frequency_test;
-            hs_freq_timer = 0;
-        }
 
         extern bool rk_bat_req_flag;
         if (!rk_bat_req_flag) {
@@ -1734,7 +1736,7 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
         }
     }
 
-    // Game mode's Win LED; power save mode cuts the LED power while all of this is black.
+    // Game mode indicator. ECO bypasses the entire RGB task.
     cu_mode_indicators();
 
     // Let the keymap draw last (standard kb -> user hook chain).
@@ -1808,11 +1810,11 @@ void lpwr_wakeup_hook(void) { // awake
     
     hs_mode_scan(false, confinfo.devs, confinfo.last_btdevs);
 #ifdef LED_POWER_EN_PIN
-    gpio_write_pin_high(LED_POWER_EN_PIN);
+    gpio_write_pin(LED_POWER_EN_PIN, cu_mode_get() != CU_MODE_ECO);
 #endif
 
 #ifdef HS_LED_BOOSTING_PIN
-    gpio_write_pin_high(HS_LED_BOOSTING_PIN);
+    gpio_write_pin(HS_LED_BOOSTING_PIN, cu_mode_get() != CU_MODE_ECO);
 #endif
 
 #ifdef HS_ENCODERS_PAD_A
@@ -1827,7 +1829,7 @@ void lpwr_wakeup_hook(void) { // awake
     gpio_write_pin_low(HS_MUSIC_MODE_PIN);
 
     gpio_set_pin_output(HS_MUSIC_CUT_PIN);
-    if (confinfo.hs_music_cut) {
+    if (confinfo.hs_music_cut && cu_mode_get() != CU_MODE_ECO) {
         gpio_write_pin_high(HS_MUSIC_CUT_PIN);
         music_cut_flag = false;
     } else {
@@ -1981,4 +1983,14 @@ void hs_rgb_blink_hook_user(void) {
             linker_blink = false;
         }
     }    
+}
+
+// Do not change confinfo or EEPROM when suspending the music light controller.
+void hs_music_power(bool on) {
+    gpio_write_pin(HS_MUSIC_CUT_PIN, on && confinfo.hs_music_cut);
+    if (!on) {
+        gpio_write_pin_low(HS_MUSIC_MODE_PIN);
+        pulse_active = false;
+        hs_mucis_calibration = false;
+    }
 }

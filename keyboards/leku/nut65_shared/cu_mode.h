@@ -5,8 +5,8 @@
 // part of the per-device settings, so e.g. the gaming PC can stay in game mode while a
 // laptop on Bluetooth saves power.
 //
-//   power save: native key/bar animations hidden (status and host lights still work),
-//               LED/boost power cut after 500 ms black, sleep after at most 1 min;
+//   power save: all LEDs and boost power OFF, including status/host/music lights;
+//               RGB rendering/transmission paused; sleep after at most 1 min;
 //               on battery wireless, WFI waits 4 ms active / 8 ms idle, with UART and
 //               staging bypasses; one battery query/charge heartbeat every 15 s
 //   game:       separately configured debounce, Win key disabled (Win mode only), Win LED red
@@ -35,5 +35,5 @@ bool      cu_mode_process_record(uint16_t keycode, keyrecord_t *record); // fals
 bool      cu_mode_bar_dark(void);                       // hide the light bar's own animations
 uint16_t  cu_mode_debounce(void);                       // ms, for hs_debounce.c
 uint32_t  cu_mode_sleep_timeout(uint32_t timeout);      // ms, 0 = never
-void      cu_mode_indicators(void);                     // end of the LED frame: indicator + LED power
+void      cu_mode_indicators(void);                     // game mode indicator (ECO never renders)
 void      cu_mode_after_wake(void);

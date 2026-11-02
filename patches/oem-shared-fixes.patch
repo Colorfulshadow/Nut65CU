@@ -390,6 +390,49 @@ index 90a75ed321..58ec830b84 100644
                  rgb_matrix_set_color(g_led_config.matrix_co[h][MATRIX_COLS - MID_COL], index_rgb.r, index_rgb.g, index_rgb.b);
              }
  
+diff --git a/quantum/rgb_matrix/rgb_matrix.c b/quantum/rgb_matrix/rgb_matrix.c
+index 70175f9d50..51eba5141c 100644
+--- a/quantum/rgb_matrix/rgb_matrix.c
++++ b/quantum/rgb_matrix/rgb_matrix.c
+@@ -139,7 +139,12 @@ uint8_t rgb_matrix_map_row_column_to_led(uint8_t row, uint8_t column, uint8_t *l
+     return led_count;
+ }
+ 
++__attribute__((weak)) bool rgb_matrix_power_enabled(void) {
++    return true;
++}
++
+ void rgb_matrix_update_pwm_buffers(void) {
++    if (!rgb_matrix_power_enabled()) return;
+     rgb_matrix_driver.flush();
+ }
+ 
+@@ -351,6 +356,14 @@ static void rgb_task_flush(uint8_t effect) {
+ }
+ 
+ void rgb_matrix_task(void) {
++    if (!rgb_matrix_power_enabled()) {
++        // Keep deferred user settings writes even while the LEDs are unpowered.
++        eeconfig_flush_rgb_matrix(false);
++        // Resume with a complete fresh frame, never a partial pre-ECO buffer.
++        rgb_task_state = STARTING;
++        rgb_last_effect = UINT8_MAX;
++        return;
++    }
+     rgb_task_timers();
+ 
+     // Ideally we would also stop sending zeros to the LED driver PWM buffers
+diff --git a/quantum/rgb_matrix/rgb_matrix.h b/quantum/rgb_matrix/rgb_matrix.h
+index ceb3185d1a..a1e84ec370 100644
+--- a/quantum/rgb_matrix/rgb_matrix.h
++++ b/quantum/rgb_matrix/rgb_matrix.h
+@@ -277,3 +277,6 @@ extern last_hit_t g_last_hit_tracker;
+ #ifdef RGB_MATRIX_FRAMEBUFFER_EFFECTS
+ extern uint8_t g_rgb_frame_buffer[MATRIX_ROWS][MATRIX_COLS];
+ #endif
++
++// Board power policy. Default true; false suppresses rendering and driver flush.
++bool rgb_matrix_power_enabled(void);
 diff --git a/quantum/via.c b/quantum/via.c
 index 643d7aa3c3..f54ecd8456 100644
 --- a/quantum/via.c
